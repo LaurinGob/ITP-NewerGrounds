@@ -63,7 +63,7 @@ var updateUi = function() {
     uiComboMultiplier.innerText = comboMultiplier;
 }
 
-let player = PIXI.AnimatedSprite.fromImages(["res/textures/player.png","res/textures/player-lazereyes.jpeg"]);
+let player = PIXI.AnimatedSprite.fromImages(["res/textures/player.png","res/textures/player-lazereyes.png"]);
 player.anchor.set(0.5);
 player.position.x = SCREEN_WIDTH/2;
 player.position.y = SCREEN_HEIGHT - SCREEN_HEIGHT * 0.8;
