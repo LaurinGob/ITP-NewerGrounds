@@ -21,7 +21,6 @@ document.getElementById("canvasAnchor").appendChild(GAME.view);
 GAME.ticker.add(gameLoop);
 GAME.ticker.maxFPS = MAX_FPS;
 
-
 // #################### scene setup (loading of all objects)
 function getRandomInt(max) {
     return Math.floor(Math.random() * max);
@@ -64,15 +63,16 @@ var updateUi = function() {
     uiComboMultiplier.innerText = comboMultiplier;
 }
 
-let player = PIXI.Sprite.from("res/textures/player.png");
+let player = PIXI.AnimatedSprite.fromImages(["res/textures/player.png","res/textures/enemy.png"]);
 player.anchor.set(0.5);
 player.position.x = SCREEN_WIDTH/2;
 player.position.y = SCREEN_HEIGHT - SCREEN_HEIGHT * 0.8;
 GAME.stage.addChild(player);
 
-let floor = PIXI.Sprite.from("res/textures/player.png");
+let floor = PIXI.Sprite.from("res/textures/floor.jpg");
 floor.position.x = 0;
-floor.position.y = SCREEN_HEIGHT - floor.height;
+floor.position.y = SCREEN_HEIGHT - 80;
+floor.height = 80;
 floor.width = SCREEN_WIDTH;
 GAME.stage.addChild(floor);
 
@@ -100,6 +100,13 @@ for (let i = 0; i < numberOfStones; i++) {
     GAME.stage.addChild(enemyArray[i]);
 }
 
+let y_velocity = 0;
+let player_airborne = false;
+let player_jumping = false;
+let player_height = 0;
+let max_height = 100;
+let jump_release = true;
+
 // #################### gameloop
 function gameLoop(delta) {
     // main gameloop for the game logic
@@ -116,10 +123,38 @@ function gameLoop(delta) {
     //         player.position.y += speed*delta;
     //     }
     // }
-    if (player.position.y < SCREEN_HEIGHT - floor.height - player.height/2) {
-        player.position.y += fallingspeed * delta;
-    }
+    // player.position.y += y_velocity * delta;
+    // if (player.position.y < SCREEN_HEIGHT - floor.height - player.height/2) {
+    //     y_velocity += fallingspeed * delta;
+    //     player_falling = true;
+    // } else {
+    //     y_velocity = 0;
+    //     player.position.y = SCREEN_HEIGHT - floor.height - player.height/2;
+    //     player_falling = false;
+    // }
 
+    if (player.position.y < SCREEN_HEIGHT - floor.height - (player.height/2) || y_velocity < 0) {
+        y_velocity += fallingspeed * delta;
+        if (y_velocity > 0) {
+            player_jumping = false;
+        }
+    } else {
+        y_velocity = 0;
+        player.position.y = SCREEN_HEIGHT - floor.height - (player.height/2);
+        player_airborne = false;
+    }
+    player.position.y += y_velocity * delta;
+    if (keys['87'] && jump_release) {
+        player.gotoAndStop(0);
+        jump_release = false;
+        setTimeout(function() {jump_release = true;player.gotoAndStop(1);}, 1000);
+        // w key move up
+        if (player_airborne === false) {
+            player_jumping = true;
+            player_airborne = true;
+            y_velocity = -65;
+        }
+    }
     if (keys['65']) {
         // a key move left
         if (player.position.x > 0 + player.height/2) {
