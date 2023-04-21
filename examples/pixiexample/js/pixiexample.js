@@ -63,7 +63,7 @@ var updateUi = function() {
     uiComboMultiplier.innerText = comboMultiplier;
 }
 
-let player = PIXI.AnimatedSprite.fromImages(["res/textures/player.png","res/textures/enemy.png"]);
+let player = PIXI.AnimatedSprite.fromImages(["res/textures/player.png","res/textures/player-lazereyes.jpeg"]);
 player.anchor.set(0.5);
 player.position.x = SCREEN_WIDTH/2;
 player.position.y = SCREEN_HEIGHT - SCREEN_HEIGHT * 0.8;
@@ -103,36 +103,11 @@ for (let i = 0; i < numberOfStones; i++) {
 let y_velocity = 0;
 let player_airborne = false;
 let player_jumping = false;
-let player_height = 0;
-let max_height = 100;
 let jump_release = true;
 
 // #################### gameloop
 function gameLoop(delta) {
     // main gameloop for the game logic
-    // receives input
-    // if (keys['87']) {
-    //     // w key move up
-    //     if (player.position.y > 0 + player.height/2) {
-    //         player.position.y -= speed*delta;
-    //     }
-    // }
-    // if (keys['83']) {
-    //     // s key move down
-    //     if (player.position.y < SCREEN_HEIGHT - player.height/2) {
-    //         player.position.y += speed*delta;
-    //     }
-    // }
-    // player.position.y += y_velocity * delta;
-    // if (player.position.y < SCREEN_HEIGHT - floor.height - player.height/2) {
-    //     y_velocity += fallingspeed * delta;
-    //     player_falling = true;
-    // } else {
-    //     y_velocity = 0;
-    //     player.position.y = SCREEN_HEIGHT - floor.height - player.height/2;
-    //     player_falling = false;
-    // }
-
     if (player.position.y < SCREEN_HEIGHT - floor.height - (player.height/2) || y_velocity < 0) {
         y_velocity += fallingspeed * delta;
         if (y_velocity > 0) {
@@ -196,4 +171,4 @@ function gameLoop(delta) {
     }
 }
 
-// http://localhost/pixiTest/examples/pixiexample/pixiexample.html
+// http://localhost/ITP-NewerGrounds/examples/pixiexample/pixiexample.html
