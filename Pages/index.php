@@ -8,14 +8,14 @@
                 <!--Sidebar-->
                 <?php require ('./Components/sidebar.html')?>
             </div>
-            <div class="container col-9 text-center">
+            <div class="container col-9 text-center" id="site-content">
                 <!--Site-content-->
                 <h1> Finest Selection </h1>
                 <div id="gameDisplayBox" class="w-100">
                     <div class="gameCollumn w-100 d-flex mt-4">
-                        <div class="container w-25 bg-secondary"> <img src="../Resources/rock_thumbnail.png" class="thumbnail" alt="Game 1"/> </div>
-                        <div class="container w-25 bg-secondary"> <img src="#" alt="Game 2"/> </div>
-                        <div class="container w-25 bg-secondary"> <img src="#" alt="Game 3"/> </div>
+                        <div class="container w-25 bg-secondary thumbnail"> <h3> BossCock </h3><img src="../Resources/thumbnail1.png" class="mb-3" alt="Game 1"/> </div>
+                        <div class="container w-25 bg-secondary thumbnail"> <img src="#" alt="Game 2"/> </div>
+                        <div class="container w-25 bg-secondary thumbnail"> <img src="#" alt="Game 3"/> </div>
                     </div>
 
                     <div class="gameCollumn w-100 d-flex mt-4">

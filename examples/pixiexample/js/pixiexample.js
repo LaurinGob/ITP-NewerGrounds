@@ -1,7 +1,7 @@
 // #################### SETUP
 // constants
-const SCREEN_WIDTH = 1600;
-const SCREEN_HEIGHT = 900;
+const SCREEN_WIDTH = 960;
+const SCREEN_HEIGHT = 540;
 const BG_COLOR = 0xCCCCFF;
 const MAX_FPS = 60;
 
