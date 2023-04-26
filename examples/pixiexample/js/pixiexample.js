@@ -91,7 +91,6 @@ for (let i = 0; i < numberOfStones; i++) {
     GAME.stage.addChild(enemyArray[i]);
 }
 
-
 let y_velocity = 0;
 let player_airborne = false;
 let player_jumping = false;
