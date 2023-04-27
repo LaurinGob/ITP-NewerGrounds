@@ -1,0 +1,13 @@
+Links to offical Pixi documentation
+
+//General Information and guides
+https://pixijs.io/guides/basics/display-object.html
+
+//Pixi examples
+https://pixijs.io/examples/#/demos-basic/container.js
+
+//Advanced Features
+https://pixijs.download/release/docs/PIXI.Matrix.html
+
+//Ui Elements
+https://pixijs.io/ui/Button.html
