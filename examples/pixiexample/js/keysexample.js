@@ -7,8 +7,8 @@ window.addEventListener("keyup", keysUp);
 
 // specified functions for event listener
 function keysDown(e) {
-    keys[e.keyCode] = true;
+    keys[e.key] = true;
 }
 function keysUp(e) {
-    keys[e.keyCode] = false;
+    keys[e.key] = false;
 }

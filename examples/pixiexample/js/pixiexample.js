@@ -123,7 +123,7 @@ function gameLoop(delta) {
         }
     }
     player.position.y += y_velocity * delta;
-    if (keys['87'] && jump_release) {
+    if (keys[' '] && jump_release) {
         player.gotoAndStop(0);
         jump_release = false;
         // w key move up
@@ -133,13 +133,13 @@ function gameLoop(delta) {
             y_velocity = -65;
         }
     }
-    if (keys['65']) {
+    if (keys['a']) {
         // a key move left
         if (player.position.x > 0 + player.height/2) {
             player.position.x -= speed * delta;
         }
     }
-    if (keys['68']) {
+    if (keys['d']) {
         // d key move right
         if (player.position.x < SCREEN_WIDTH - player.height/2) {
             player.position.x += speed * delta;

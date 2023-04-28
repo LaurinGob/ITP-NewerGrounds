@@ -7,11 +7,11 @@ window.addEventListener("keyup", keysUp);
 
 // specified functions for event listener
 function keysDown(e) {
-    keys[e.keyCode] = true;
+    keys[e.key] = true;
     keysDiv.textContent = JSON.stringify(keys);
 }
 function keysUp(e) {
-    keys[e.keyCode] = false;
+    keys[e.key] = false;
     keysDiv.textContent = JSON.stringify(keys);
 }
 
@@ -21,6 +21,7 @@ let keysDiv;
 keysDiv = document.querySelector("#keys");
 
 // example usage (usually inside the gameloop) - the keycode map is found in utils.js
-if (keys["87"]) {
+if (keys["w"]) {
     // do something
+    console.log("up");
 }

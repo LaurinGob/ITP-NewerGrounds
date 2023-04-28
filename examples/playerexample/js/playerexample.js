@@ -32,13 +32,13 @@ player_running = false
 // #################### gameloop
 function gameLoop(delta) {
     if (gameLoaded) {
-        if (keys['68']) {
+        if (keys['d']) {
             if (!player_running) {
                 player.textures = SHEET.animations['adventurer-run'];
                 player_running = true;
                 player.play();
             }
-        } else if (!keys['68']) { // TODO: WARUMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
+        } else if (!keys['d']) { // TODO: WARUMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
             player.textures = SHEET.animations['adventurer-idle'];
             player.play();
             player_running = false;
