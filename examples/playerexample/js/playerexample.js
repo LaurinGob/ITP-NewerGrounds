@@ -43,7 +43,8 @@ const ALLOWED_STATES =  {
     "slide_left" : ["idle"],
     "crouch" : ["idle"],
     "attack" : ["idle"],
-    "jumping" : ["idle"],
+    "air_attack":["idle"],
+    "jumping" : ["idle", "air_attack"],
     "animation_finished" : ["idle"],
     "flying" : ["idle"],
     "running" : ["jump", "idle"],
@@ -63,11 +64,13 @@ function gameLoop(delta) {
         updateAnimations(state);
     }
 }
-
 function getKeyInput(state) {
     if (keys[' ']) {
         // attack
         GAMESTATE.moveToState('attack');
+    }
+    if(state === 'jumping' && keys[' ']){
+        GAMESTATE.moveToState('air_attack');
     }
     if (keys['w']) {
         // jump
@@ -90,6 +93,12 @@ function getKeyInput(state) {
 
     //
     if ((state === 'running_left' || state === 'running_right')
+        && !(keys['a'] || keys['d'])) {
+        // BREAKING CONDITION running: if in running animation and not pressing a run button
+        GAMESTATE.moveToState('idle');
+    }
+
+    if ((state === 'slide_left' || state === 'slide_right')
         && !(keys['a'] || keys['d'])) {
         // BREAKING CONDITION running: if in running animation and not pressing a run button
         GAMESTATE.moveToState('idle');
@@ -121,6 +130,10 @@ function updateAnimations(state) {
                 break;
             case 'attack':
                 player.textures = SHEET.animations['adventurer-attack2']
+                player.loop = false;
+                break;
+            case 'air_attack':
+                player.textures = SHEET.animations['adventurer-air-attack1']
                 player.loop = false;
                 break;
             case 'jumping':
