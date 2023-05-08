@@ -36,7 +36,7 @@ GAME.ticker.add(gameLoop); // must be called after loadRessources!
 GAME.ticker.maxFPS = MAX_FPS;
 
 const ALLOWED_STATES =  {
-    "idle" : ["running", "jumping", "attack", "running_right", "running_left", "crouch"],
+    "idle" : ["running", "jumping", "attack", "running_right", "running_left", "crouch", "cast"],
     "running_right" : ["idle", "jumping", "attack", "running_left", "slide_right"],
     "running_left" : ["idle", "jumping", "attack", "running_right", "slide_left"],
     "slide_right" : ["idle"],
@@ -48,6 +48,8 @@ const ALLOWED_STATES =  {
     "animation_finished" : ["idle"],
     "flying" : ["idle"],
     "running" : ["jump", "idle"],
+    "cast" : ["idle", "cast-loop"],
+    "cast-loop" : ["idle"]
 }
 
 const GAMESTATE = new StateMachine(ALLOWED_STATES);
@@ -91,7 +93,18 @@ function getKeyInput(state) {
         }
     }
 
-    //
+    if (keys['e']) {
+        if (state === 'cast') {
+            GAMESTATE.moveToState('cast-loop')
+        } else {
+            GAMESTATE.moveToState('cast');
+        }
+    }
+
+    if (state === 'cast-loop' && !keys['e']) {
+        GAMESTATE.moveToState('idle');
+    }
+
     if ((state === 'running_left' || state === 'running_right')
         && !(keys['a'] || keys['d'])) {
         // BREAKING CONDITION running: if in running animation and not pressing a run button
@@ -170,6 +183,14 @@ function updateAnimations(state) {
                 break;
             case 'crouch':
                 player.textures = SHEET.animations['adventurer-crouch']
+                player.loop = true;
+                break;
+            case 'cast':
+                player.textures = SHEET.animations['adventurer-cast']
+                player.loop = false;
+                break;
+            case 'cast-loop':
+                player.textures = SHEET.animations['adventurer-cast-loop']
                 player.loop = true;
                 break;
         }
