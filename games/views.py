@@ -41,9 +41,9 @@ def playerexample(request: HttpRequest):
     context = {'game': game}
     return render(request, 'games/playerexample.html', context)
 
-def noodleJump(request: HttpRequest):
-    game = Game.objects.get(internal_name='noodleJump')  # <- internal_name auf <spielname> anpassen
+def flappyNoodle(request: HttpRequest):
+    game = Game.objects.get(internal_name='flappyNoodle')  # <- internal_name auf <spielname> anpassen
 
     context = {'game': game}
 
-    return render(request, 'games/noodleJump.html', context)  # <- .html auf <spielname>.html ausbessern
+    return render(request, 'games/flappyNoodle.html', context)  # <- .html auf <spielname>.html ausbessern
