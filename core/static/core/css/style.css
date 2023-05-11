@@ -1,0 +1,39 @@
+
+/*
+form{
+    border: aqua dashed
+}
+*/
+
+canvas{
+    border: black dashed
+}
+
+/* Set the dropdown menu position*/
+.dropdown-menu {
+    position: absolute;
+}
+
+/* Set the navbar element position*/
+.navbar {
+    position: relative;
+}
+
+/* Position the dropdown menu relative to the navbar */
+.dropdown-menu[data-bs-popper] {
+    top: 100%;
+    left: 0;
+}
+
+/* Make sure the dropdown menu stays within the viewport */
+.dropdown-menu[data-bs-popper] .dropdown-menu {
+    position: static !important;
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+}
+
+/* Show the dropdown menu on hover or focus */
+.nav-item:hover .dropdown-menu,
+.nav-item:focus-within .dropdown-menu {
+    display: block;
+}

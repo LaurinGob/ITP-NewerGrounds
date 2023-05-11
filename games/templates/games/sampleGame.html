@@ -1,0 +1,18 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+
+{% block content %}
+
+<h1>{{ game.title }}</h1>
+
+{# Game-specific scripts (like libraries, ... #}
+<link rel="stylesheet" href="{% static 'test.css' %}">
+<script src='../../static/games/libs/jquery.min.js'></script>
+
+{# Canvas #}
+<canvas src='../../static/games/exampleGame/sampleGameLogic.js'></canvas>
+
+<p>{{ game.description }}</p>
+
+{% endblock content %}

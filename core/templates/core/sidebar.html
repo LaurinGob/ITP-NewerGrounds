@@ -1,0 +1,43 @@
+{% load static %}
+
+<div id="sidebar" class="flex-shrink-0 mw-100 h-100 bg-secondary">
+    <a href="./index.php" class="d-flex align-items-center pb-3 mb-3 link-dark text-decoration-none border-bottom">
+        <svg class="bi me-2" width="30" height="24"><use xlink:href="#bootstrap"></use></svg>
+        <span class="fs-5 fw-semibold">Sidebar</span>
+    </a>
+    <ul class="list-group list-group-flush ps-0">
+<!--        Searchbar   -->
+        <li class="list-group-item">
+            <div class="input-group flex-nowrap">
+                <span class="input-group-text" id="addon-wrapping">Lupe einf.</span>
+                <input type="text" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="addon-wrapping">
+            </div>
+        </li>
+<!--        Favourites  -->
+        <li class="list-group-item">
+            <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#favourite-collapse" aria-expanded="true">
+                Favourites
+            </button>
+            <div class="collapse show" id="favourite-collapse">
+                <ul class="list-group">
+                    <li class="list-group-item">Noodle Jump</li>
+                    <li class="list-group-item">Farfalle Run</li>
+                    <li class="list-group-item">Pasta la Vista</li>
+                </ul>
+            </div>
+        </li>
+<!--        Category    -->
+        <li class="list-group-item">
+            <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#category-collapse" aria-expanded="true">
+                Category
+            </button>
+            <div class="collapse show" id="category-collapse">
+                <ul class="list-group">
+                    <li class="list-group-item">Noodle Jump</li>
+                    <li class="list-group-item">Farfalle Run</li>
+                    <li class="list-group-item">Pasta la Vista</li>
+                </ul>
+            </div>
+        </li>
+    </ul>
+</div>

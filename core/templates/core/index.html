@@ -1,0 +1,30 @@
+{% extends 'core/base.html' %}
+
+{% load static %}
+
+{% block content %}
+    {# This is where an individual site's content will be included #}
+    <div class="container col-9 text-center" id="site-content">
+    <!--Site-content-->
+    <h1> Finest Selection </h1>
+    <div id="gameDisplayBox" class="w-100">
+        <div class="gameCollumn w-100 d-flex mt-4">
+            <div class="container w-25 bg-secondary thumbnail"> <a href="pixiexample"> <h3> TheRock </h3><img src="#" class="mb-3" alt="Game 1"/> </a> </div>
+            <div class="container w-25 bg-secondary thumbnail"> <a href="playerexample"> <h3> Player </h3><img src="#" class="mb-3" alt="Game 1"/> </a> </div>
+            <div class="container w-25 bg-secondary thumbnail"> <img src="#" alt="Game 3"/> </div>
+        </div>
+
+        <div class="gameCollumn w-100 d-flex mt-4">
+            <div class="container w-25 bg-secondary"> <img src="#" alt="Game 4"/> </div>
+            <div class="container w-25 bg-secondary"> <img src="#" alt="Game 5"/> </div>
+            <div class="container w-25 bg-secondary"> <img src="#" alt="Game 6"/> </div>
+        </div>
+
+        <div class="gameCollumn w-100 d-flex mt-4">
+            <div class="container w-25 bg-secondary"> <img src="#" alt="Game 7"/> </div>
+            <div class="container w-25 bg-secondary"> <img src="#" alt="Game 8"/> </div>
+            <div class="container w-25 bg-secondary"> <img src="#" alt="Game 9"/> </div>
+        </div>
+    <div>
+    </div>
+{% endblock content %}

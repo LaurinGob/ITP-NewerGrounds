@@ -1,0 +1,33 @@
+{% load static %}
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <div class="container-fluid">
+    <img src="{% static 'core/resources/ramen.png' %}" style="max-width: 75px;" class="me-3">
+    <h1> NoodleGrounds </h1>
+    <div class="collapse navbar-collapse d-flex justify-content-end" id="navbarNav">
+      <ul class="navbar-nav w-50 d-flex justify-content-end text-center">
+
+        <li class="nav-item w-25">
+          <a class="nav-link active" aria-current="page" href="/">Home</a>
+        </li>
+
+        <li class="nav-item w-25">
+          <a class="nav-link" href="#">Contact</a>
+        </li>
+
+        <li class="nav-item w-25">
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" disabled="disabled">Profile</a>
+
+          <ul class="dropdown-menu dropdown-menu" id="profileDropdown" aria-labelledby="profileDropdown">
+            <li></hr><a class="dropdown-item" href="#"> Profile </a></li>
+            <li><hr class="dropdown-divider"></hr><a class="dropdown-item" href="\login"> Login </a></li>
+            <li><hr class="dropdown-divider"></hr><a class="dropdown-item" href="\register"> Registration </a></li>
+            <li><hr class="dropdown-divider"></hr><a class="dropdown-item" href="#"> Settings </a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+

@@ -1,0 +1,17 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+
+{% block content %}
+
+<script src="../../static/games/playerexample/js/keysexample.js" defer></script>
+<script src="../../static/games/playerexample/js/pixi.min.js" defer></script>
+<script src="../../static/games/playerexample/js/statemachine.js" defer></script>
+<script src="../../static/games/playerexample/js/playerexample.js" defer></script>
+
+<p>This example shows, how to use animation frames to animate a player with pixi.js and a statemachine.</p>
+<div id="canvasAnchor"></div>
+<p id="keys"></p>
+<p id="gameState"></p>
+
+{% endblock content %}

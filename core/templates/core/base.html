@@ -1,0 +1,30 @@
+{# Grundgerüst bzw "Basis" der Website. #} 
+{# https://docs.djangoproject.com/en/4.1/ref/templates/language/#template-inheritance #}
+{# Jede HTML Datei, die base.html über {% extends 'core/base.html %} einbindet, bekommt base.html #} 
+{# als "Wrapper" und fügt selbst zwischen die {% block content %}{% endblock %} Blöcke ein. #}
+
+<!DOCTYPE html>
+{% load static %}  {# Notwendig, um {% static '' %}-tag benutzen zu können; muss am Anfang jedes HTML-Dokuments mit static Tag stehen. #}
+
+{% include 'core/head.html' %}
+
+<body>
+  {% include 'core/navbar.html' %}
+  <div class="row">
+    <div class="container col-3">
+      <!--Sidebar-->
+      {% include 'core/sidebar.html' %}
+    </div>
+   
+    <div class="container col-9 p-4">
+      {% block content %}
+      {# This is where an individual site's content will be included #}
+  
+      {% endblock content %}
+    </div>
+  </div>
+
+  <script src="{% static 'core/js/bootstrap.bundle.min.js' %}"></script>
+
+</body>
+</html>
