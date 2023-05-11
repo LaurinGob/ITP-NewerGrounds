@@ -7,11 +7,13 @@
 <h1>{{ game.title }}</h1>
 
 {# Game-specific scripts (like libraries, ... #}
-<link rel="stylesheet" href="{% static 'test.css' %}">
-<script src='../../static/games/libs/jquery.min.js'></script>
+<script src="../../static/games/libs/pixi.min.js" defer></script>
+<script src="../../static/games/libs/keyInput.js" defer></script>
+<script src="../../static/games/flappyNoodle/flappyNoodle.js" defer></script>
 
 {# Canvas #}
-<canvas src='../../static/games/exampleGame/sampleGameLogic.js'></canvas>
+<div id="canvasAnchor" style="position: relative;">
+</div>
 
 <p>{{ game.description }}</p>
 
