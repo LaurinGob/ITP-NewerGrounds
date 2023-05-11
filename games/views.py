@@ -40,3 +40,8 @@ def playerexample(request: HttpRequest):
     game = Game.objects.get(internal_name='playerexample')
     context = {'game': game}
     return render(request, 'games/playerexample.html', context)
+
+def noodleJump(request: HttpRequest):
+    game = Game.objects.get(internal_name='noodleJump')
+    context = {'game': game}
+    return render(request, 'games/noodleJump.html', context)
