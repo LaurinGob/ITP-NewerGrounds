@@ -27,14 +27,36 @@ GAME.ticker.maxFPS = MAX_FPS;
 /* ~~~~~ Setup ~~~~~ */
 let background_texture;
 let background;
+let platform_texture = PIXI.Texture.from('../../static/games/noodleJump/res/textures/penne_platform.png');
+let player_texture = PIXI.Texture.from('../../static/games/noodleJump/res/textures/meatball_player.png');;
+
 const PLAYER = new Player();
 let PLATFORMS = [];
 for (let i=0; i<MAX_PLATFORMS; i++){
     PLATFORMS[i] = new Platform(Math.random()*SCREEN_WIDTH, Math.random()*SCREEN_HEIGHT);
 }
 
+//sprites
+PLAYER.sprite = new PIXI.Sprite(player_texture);
+PLAYER.sprite.width = 100;
+PLAYER.sprite.height = 100;
+PLAYER.sprite.position.set(0);
+
+for (let i=0; i<MAX_PLATFORMS; i++){
+    PLATFORMS[i].sprite = new PIXI.Sprite(platform_texture);
+    PLATFORMS[i].sprite.width = 200;
+    PLATFORMS[i].sprite.height = 30;
+}
+
+
 async function loadRessources() {
     background_texture = await PIXI.Assets.load('../../static/games/noodleJump/res/textures/background.avif');
+
+    /*
+    platform_texture = await PIXI.Assets.load('../../static/games/noodleJump/res/textures/penne_platform.png');
+    player_texture = await PIXI.Assets.load('../../static/games/noodleJump/res/textures/meatball_player.png');
+    */
+
     createSprites();
 }
 
@@ -43,6 +65,7 @@ function createSprites() {
     background.width = SCREEN_WIDTH;
     background.height = SCREEN_HEIGHT;
     background.position.set(0);
+    
     setup();
 }
 
@@ -52,9 +75,16 @@ loadRessources();
 function gameLoop(delta) {
     PLAYER.applyGravity(delta);
     PLAYER.applyVelocity(delta);
+    PLAYER.mapWrap();
     PLAYER.updateSprite();
     for (let i=0; i<MAX_PLATFORMS; i++){
-        PLATFORMS[i].updateSprite;
+        //update platform sprites
+        PLATFORMS[i].updateSprite();
+
+        //check for collision with player
+        if(playerJump(PLAYER.sprite.getBounds(), PLATFORMS[i].sprite.getBounds()) && PLAYER.velocity_y >= 0){
+            PLAYER.velocity_y = -7;
+        }
     }
 
     //key input
@@ -68,19 +98,14 @@ function gameLoop(delta) {
     if (!(keys['a'] || keys['d'])) {
         PLAYER.velocity_x /= 2;
     }
-
-    //constantly jumping on collision
-    
-
 }
 
 function setup(){
     GAME.stage.addChild(background);
     GAME.stage.addChild(PLAYER.sprite);
     for (let i=0; i<MAX_PLATFORMS; i++){
-        GAME.stage.addChild(PLATFORMS[i]);
+        GAME.stage.addChild(PLATFORMS[i].sprite);
     }
-
 }
 
 
@@ -98,5 +123,14 @@ const AABBintersection = function(boxA, boxB) {
     if (boxA.top > boxB.bottom) {
         return false;
     }
-    return 1;
+    return true;
+}
+
+const playerJump = function(player, platform){
+    if(AABBintersection(player, platform) && (player.y + player.height < platform.y + platform.height/2)){
+        return true;
+    }
+    else{
+        return false;
+    }
 }

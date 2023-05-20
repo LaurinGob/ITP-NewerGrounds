@@ -3,9 +3,13 @@ class Platform{
         //randomize positions on spawn
         this.position_x = x;
         this.position_y = y;
-        this.sprite = new PIXI.Graphics();
+
+        this.sprite;
+
+        /*
         this.sprite.beginFill(0xff1010);
         this.sprite.drawRect(0, 0, 100, 10);
+        */
     }
 
     updateSprite() {
