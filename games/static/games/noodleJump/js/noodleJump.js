@@ -1,7 +1,7 @@
 // #################### SETUP
 // constants
-const SCREEN_WIDTH = 960;
-const SCREEN_HEIGHT = 540;
+const SCREEN_WIDTH = 540;
+const SCREEN_HEIGHT = 960;
 const BG_COLOR = 0xCCCCFF;
 const MAX_FPS = 60;
 const RES_URL = '../../static/games/noodleJump/res/';
