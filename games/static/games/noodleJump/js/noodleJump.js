@@ -176,6 +176,6 @@ const controlPlayer = function(){
 }
 
 const VelocityCalculation_x = function(){
-    TAN_INPUT += 0.15;
-    return (Math.atan(TAN_INPUT-1)+1);
+    TAN_INPUT += 0.35;
+    return 2*(Math.atan(TAN_INPUT-1)+1);
 }
