@@ -12,12 +12,12 @@ class Platform{
         */
     }
 
-    updateSprite() {
+    updateSprite(SCORE) {
         this.sprite.position.x = this.position_x;
-        this.sprite.position.y = this.position_y;
+        this.sprite.position.y = this.position_y + SCORE;
     }
 
-    movePlatform(MAX_HEIGHT){
-        
+    movePlatform(SCORE){
+        this.position_y += SCORE;
     }
 }

@@ -6,6 +6,9 @@ const BG_COLOR = 0xCCCCFF;
 const MAX_FPS = 60;
 const RES_URL = '../../static/games/noodleJump/res/';
 const MAX_PLATFORMS = 6;
+let SCORE = 0;
+
+let TAN_INPUT = 0;
 
 // creates new pixi object
 const GAME = new PIXI.Application(
@@ -19,9 +22,7 @@ const GAME = new PIXI.Application(
 // adds pixi canvas to selected dom
 document.getElementById("canvasAnchor").appendChild(GAME.view);
 
-// adds the gameloop function to ticker (pixi.js)
-GAME.ticker.add(gameLoop);
-GAME.ticker.maxFPS = MAX_FPS;
+
 
 
 /* ~~~~~ Setup ~~~~~ */
@@ -33,21 +34,54 @@ let player_texture = PIXI.Texture.from('../../static/games/noodleJump/res/textur
 const PLAYER = new Player();
 let PLATFORMS = [];
 for (let i=0; i<MAX_PLATFORMS; i++){
-    PLATFORMS[i] = new Platform(Math.random()*SCREEN_WIDTH, Math.random()*SCREEN_HEIGHT);
+    if(i == 0){
+        PLATFORMS[i] = new Platform(SCREEN_WIDTH/2, SCREEN_HEIGHT-100);
+    }
+    else{
+        PLATFORMS[i] = new Platform((SCREEN_WIDTH/MAX_PLATFORMS) * i, (SCREEN_HEIGHT/MAX_PLATFORMS) * i);
+    }
 }
 
-//sprites
-PLAYER.sprite = new PIXI.Sprite(player_texture);
-PLAYER.sprite.width = 100;
-PLAYER.sprite.height = 100;
-PLAYER.sprite.position.set(0);
 
-for (let i=0; i<MAX_PLATFORMS; i++){
-    PLATFORMS[i].sprite = new PIXI.Sprite(platform_texture);
-    PLATFORMS[i].sprite.width = 200;
-    PLATFORMS[i].sprite.height = 30;
+
+
+
+loadRessources();
+
+/* ~~~~~ Loop ~~~~~ */
+function gameLoop(delta) {
+
+    PLAYER.applyGravity(delta);
+    PLAYER.applyVelocity_x(delta);
+    PLAYER.mapWrap();
+    PLAYER.updateSprite();
+
+    //Calculating Score
+    if(PLAYER.sprite.position.y < SCREEN_HEIGHT/3 && PLAYER.velocity_y <0){
+        SCORE -= PLAYER.velocity_y * delta;
+    }
+    else{
+        PLAYER.applyVelocity_y(delta);
+    }
+
+    //Platform handling
+    for (let i=0; i<MAX_PLATFORMS; i++){
+        //update platform sprites
+        PLATFORMS[i].updateSprite(SCORE);
+        //check for collision with player
+        if(playerJump(PLAYER.sprite.getBounds(), PLATFORMS[i].sprite.getBounds()) && PLAYER.velocity_y >= 0){
+            PLAYER.velocity_y = -7;
+        }
+    }
+    //Gameplay
+    controlPlayer();
+
 }
 
+
+
+
+//--------------------------- Setup Functions --------------------------------------------------
 
 async function loadRessources() {
     background_texture = await PIXI.Assets.load('../../static/games/noodleJump/res/textures/background.avif');
@@ -61,43 +95,26 @@ async function loadRessources() {
 }
 
 function createSprites() {
-    background = new PIXI.TilingSprite(background_texture);
+    //Background Sprite setup
+    background = new PIXI.TilingSprite(background_texture); //erstellt
     background.width = SCREEN_WIDTH;
     background.height = SCREEN_HEIGHT;
     background.position.set(0);
+
+
+    //Player Sprite setup
+    PLAYER.sprite = new PIXI.Sprite(player_texture);
+    PLAYER.sprite.width = 100;
+    PLAYER.sprite.height = 100;
+    PLAYER.sprite.position.set(0);
+
+    for (let i=0; i<MAX_PLATFORMS; i++){
+        PLATFORMS[i].sprite = new PIXI.Sprite(platform_texture);
+        PLATFORMS[i].sprite.width = 200;
+        PLATFORMS[i].sprite.height = 30;
+    }
     
     setup();
-}
-
-loadRessources();
-
-/* ~~~~~ Loop ~~~~~ */
-function gameLoop(delta) {
-    PLAYER.applyGravity(delta);
-    PLAYER.applyVelocity(delta);
-    PLAYER.mapWrap();
-    PLAYER.updateSprite();
-    for (let i=0; i<MAX_PLATFORMS; i++){
-        //update platform sprites
-        PLATFORMS[i].updateSprite();
-
-        //check for collision with player
-        if(playerJump(PLAYER.sprite.getBounds(), PLATFORMS[i].sprite.getBounds()) && PLAYER.velocity_y >= 0){
-            PLAYER.velocity_y = -7;
-        }
-    }
-
-    //key input
-
-    if (keys['a']) {
-        PLAYER.velocity_x += -0.05;
-    }
-    if (keys['d']) {
-        PLAYER.velocity_x += 0.05;
-    }
-    if (!(keys['a'] || keys['d'])) {
-        PLAYER.velocity_x /= 2;
-    }
 }
 
 function setup(){
@@ -106,10 +123,15 @@ function setup(){
     for (let i=0; i<MAX_PLATFORMS; i++){
         GAME.stage.addChild(PLATFORMS[i].sprite);
     }
+
+    // adds the gameloop function to ticker (pixi.js)
+    GAME.ticker.add(gameLoop);
+    GAME.ticker.maxFPS = MAX_FPS;
+
 }
 
 
-// #################### helper functions
+//----------------------------- Gameplay functions ----------------------------------
 const AABBintersection = function(boxA, boxB) {
     if (boxA.right < boxB.left) {
         return false;
@@ -133,4 +155,27 @@ const playerJump = function(player, platform){
     else{
         return false;
     }
+}
+
+const controlPlayer = function(){
+    //key input
+    if (keys['a'] && !keys['d']) {
+        PLAYER.velocity_x = -VelocityCalculation_x();
+    }
+    if (keys['d'] && !keys['a']) {
+        PLAYER.velocity_x = VelocityCalculation_x();
+    }
+    if (!(keys['a'] || keys['d'])) {
+        TAN_INPUT = 0;
+        PLAYER.velocity_x /= 2;
+    }
+    if(keys['a'] && keys['d']){
+        TAN_INPUT = 0;
+        PLAYER.velocity_x /= 2;
+    }
+}
+
+const VelocityCalculation_x = function(){
+    TAN_INPUT += 0.15;
+    return (Math.atan(TAN_INPUT-1)+1);
 }

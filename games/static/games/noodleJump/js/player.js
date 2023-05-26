@@ -19,8 +19,11 @@ class Player {
         this.sprite.position.y = this.position_y;
     }
     
-    applyVelocity(delta) {
+    applyVelocity_x(delta) {
         this.position_x += this.velocity_x * delta;
+    }
+
+    applyVelocity_y(delta) {
         this.position_y += this.velocity_y * delta;
     }
     
@@ -41,4 +44,5 @@ class Player {
             this.position_x = - this.sprite.width/2;
         }
     }
+
 }
