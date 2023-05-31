@@ -1,12 +1,23 @@
-
-/*
-form{
-    border: aqua dashed
+/*~~~~~~~~~~~~~~~~~ body ~~~~~~~~~~~~~~~~~*/
+h1{
+    font-family: "Comic Sans MS", cursive;
 }
-*/
+
+/*~~~~~~~~~~~~~~~~~ game canvas ~~~~~~~~~~~~~~~~~*/
 
 canvas{
     border: black dashed
+}
+
+/*~~~~~~~~~~~~~~~~~ navbar + navbar dropdown ~~~~~~~~~~~~~~~~~*/
+nav{
+    background-color: #990000;
+    color: white;
+}
+
+.nav-link{
+    color: white !important;
+    font-weight: bold;
 }
 
 /* Set the dropdown menu position*/
@@ -36,4 +47,42 @@ canvas{
 .nav-item:hover .dropdown-menu,
 .nav-item:focus-within .dropdown-menu {
     display: block;
+}
+
+/*~~~~~~~~~~~~~~~~~ index page game containers ~~~~~~~~~~~~~~~~~*/
+#gameDisplayBox .container{
+    /*general*/
+    min-height: 180px;
+    min-width: 180px;
+
+    /*background*/
+    background-image: url('../resources/plate.png');
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+
+    /*text*/
+    overflow-wrap: break-word;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#gameDisplayBox .container a{
+    color: #ECECEC;
+    text-decoration: none;
+}
+
+/*~~~~~~~~~~~~~~~~~ foolter ~~~~~~~~~~~~~~~~~*/
+#footer{
+    background-color: #78430d;
+}
+
+#footer footer div *{
+    color: white !important;
+}
+
+#footer footer ul li a{
+    color: white !important;
+    text-decoration: none;
 }
