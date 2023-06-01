@@ -1,6 +1,7 @@
 // #################### CONFIG
 let fallingSpeed = 3;
 var forkPng;
+let score = 0;
 
 loadResources();
 
@@ -29,10 +30,13 @@ GAME.ticker.maxFPS = MAX_FPS;
 
 // ############### GAME SETUP
 
-// Player
-const player = new PIXI.Graphics();
-player.beginFill(0xFF66FF);
-player.drawRect(200, 200, 50, 50);
+//new Player
+const player = PIXI.Sprite.from('/static/games/flappyNoodle/res/Noodle.png');
+player.anchor.set(0.5);
+player.position.x = 200;
+player.position.y = SCREEN_HEIGHT/2;
+player.scale.set(0.06);
+
 GAME.stage.addChild(player);
 
 // Forks
@@ -41,12 +45,15 @@ async function loadResources(){
     forkPng = await PIXI.Assets.load('/static/games/flappyNoodle/res/Gabel.png');
     
     setInterval(() => {
+        //Random Number btw -100 und 100
+        let randomNumber = Math.floor(Math.random() * 201) - 100;
+
         // Bottom fork
         let forkBottom = new PIXI.Sprite(forkPng);
         forkBottom.scale.set(0.4);
 
         forkBottom.position.x = SCREEN_WIDTH;
-        forkBottom.position.y = Number(SCREEN_HEIGHT) - 200;
+        forkBottom.position.y = Number(SCREEN_HEIGHT)/2 + 100 + randomNumber;
         
         GAME.stage.addChild(forkBottom);
         forks.push(forkBottom);
@@ -54,21 +61,46 @@ async function loadResources(){
         // Top fork
         let forkTop = new PIXI.Sprite(forkPng);
         forkTop.scale.set(0.4);
-        forkTop.rotation = Math.PI;
+        forkTop.scale.y = -0.4;
 
         forkTop.position.x = SCREEN_WIDTH;
-        forkTop.position.y = Number(SCREEN_HEIGHT) - 200;
+        forkTop.position.y = Number(SCREEN_HEIGHT)/2 - 100 + randomNumber;
         
         GAME.stage.addChild(forkTop);
         forks.push(forkTop);
-    }, 400)
+    }, 2000)
+
+    setTimeout(() => {
+        setInterval(() =>  {
+            forks.splice(0, 2);
+            //console.log(forks);
+        }, 2000)     
+    }, 5000)
+
+    setTimeout(() => {
+        setInterval(() =>  {
+            ++score;
+        }, 2000)     
+    }, 3500)
 }
 
+//Rotation
+function getRotation(velocity){
+    if(velocity >= 10){
+        return Math.PI*3/2 + 0.5;
+    } else if(velocity <= -10){
+        return -(Math.PI*3/2 + 0.5);
+    } else {
+        return -velocity/10;
+    }
+    
+}
 
 // Vars
-let jumpVelocity = 15;
+let jumpVelocity = 10;
 let velocity = jumpVelocity;
 let spaceHasBeenPressed = false;
+let rotationIncrement = -0.05;
 
 // Game loop
 function gameLoop(delta) {
@@ -86,6 +118,9 @@ function gameLoop(delta) {
     if(!keys[' '] && spaceHasBeenPressed){
         spaceHasBeenPressed = false;
     }
+
+    player.rotation = getRotation(velocity);
+
 
     // Fork movement
     forks.forEach((fork) => {
