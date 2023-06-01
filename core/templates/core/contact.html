@@ -1,0 +1,51 @@
+{% extends 'core/base.html' %} {% load static %} 
+{% block content %}
+<div>
+    <div class="d-flex justify-content-center">
+        <h1> Information </h1>
+    </div>
+
+    <div class="d-flex justify-content-center">
+        <div class="w-50 m-3">
+            <h2> Creators </h2>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item d-flex"> <p class="w-50 text-uppercase"> Adrian Andretsch <p> <p class="w-50"> Backend Engineer <p> </li>
+                <li class="list-group-item d-flex"> <p class="w-50 text-uppercase"> Lino Breuss <p> <p class="w-50"> Game Developer <p> </li>
+                <li class="list-group-item d-flex"> <p class="w-50 text-uppercase"> Laurin Gobber <p> <p class="w-50"> Project Lead <p> </li>
+                <li class="list-group-item d-flex"> <p class="w-50 text-uppercase"> Raphael Pusam <p> <p class="w-50"> Frontend Specialist <p> </li>
+                <li class="list-group-item d-flex"> <p class="w-50 text-uppercase"> Nino Reil <p> <p class="w-50"> Game Developer <p> </li>
+            </ul>
+        </div>
+
+        <div class="w-50 m-3">
+            <h2> Contact and Information </h2>
+            <table class="table table-striped w-100">
+                <tr class="mt-2">
+                    <td class="w-50"> Contact Information </td>
+                    <td class="w-50"> <a href="#"> we.dont@care.com </a> </td>
+                </tr>
+                <tr  class="mt-2">
+                    <td class="w-50"> Address </td>
+                    <td class="w-50"> Höchstädtplatz 1, 1200 Vienna, Austria </td>
+                </tr>
+                <tr>
+                    <td class="w-50"> Disclaimer </td>
+                    <td class="w-50"> The content provided on this website is for entertainment purposes only. 
+                                      We do not guarantee the accuracy, completeness, or reliability of any information 
+                                      or materials available on this site. The use of this website is at your own risk. </td>
+                </tr>
+                <tr  class="mt-2">
+                    <td class="w-50"> Copyright Policy </td>
+                    <td class="w-50"> All rights reserved. The content, graphics, and design of this website are protected by copyright laws.</td>
+                </tr>
+                <tr  class="mt-2">
+                    <td class="w-50"> Terms of Use </td>
+                    <td class="w-50"> By accessing and using this website, you agree to comply with the terms of use. 
+                                      You must be aware that misuse or unauthorized use of the website may violate applicable laws. </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

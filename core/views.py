@@ -11,6 +11,8 @@ from .models import User
 def index(request: HttpRequest):
     return render(request, 'core/index.html')
 
+def contact(request: HttpRequest):
+    return render(request, 'core/contact.html')
 
 def vw_login(request: HttpRequest):
     # If user is requesting site    
@@ -20,6 +22,7 @@ def vw_login(request: HttpRequest):
     # If user has submitted the form
     elif request.method == "POST":
         form = LoginForm(request.POST)
+        context = {}
 
         if form.is_valid():
             email = form.cleaned_data['email']
