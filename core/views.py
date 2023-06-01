@@ -14,6 +14,12 @@ def index(request: HttpRequest):
 def contact(request: HttpRequest):
     return render(request, 'core/contact.html')
 
+def profile(request: HttpRequest):
+    if request.user.is_authenticated:
+        return render(request, 'core/profile.html')
+    else:
+        return render(request, 'core/login.html', {'form': LoginForm})
+
 def vw_login(request: HttpRequest):
     # If user is requesting site    
     if request.method == "GET":
