@@ -80,13 +80,22 @@ function gameLoop(delta) {
 
     //New platform spawn
     PLATFORM_DELTA = (Math.random() * (JUMP_HEIGHT - PLAYER.sprite.height) + PLAYER.sprite.height);
-    //if the Delta above the top platform reaches a threshold of -10
-    if(PLATFORMS[PLATFORMS.length-1].position_y - PLATFORM_DELTA > 0){
-        //a new platform is created above the top platform at vertical distance PLATFORM_DELTA
-        PLATFORMS[PLATFORMS.length] = new Platform(Math.random() * SCREEN_WIDTH, PLATFORMS[PLATFORMS.length-1].position_y - PLATFORM_DELTA);
-        newPlatformSprite(PLATFORMS[PLATFORMS.length-1]);
-        //a new PLATFORM_DELTA is calculated for the next platform
-        PLATFORM_DELTA = (Math.random() * (JUMP_HEIGHT - PLAYER.sprite.height) + PLAYER.sprite.height);
+    //if the Delta above the top platform reaches a threshold
+    if (PLATFORMS[PLATFORMS.length - 1].position_y - PLATFORM_DELTA > -Number.MAX_SAFE_INTEGER) {
+        // Create a new platform above the top platform at vertical distance PLATFORM_DELTA
+        const newPlatform = new Platform(Math.random() * SCREEN_WIDTH, PLATFORMS[PLATFORMS.length - 1].position_y - PLATFORM_DELTA);
+        newPlatformSprite(newPlatform);
+        PLATFORMS.push(newPlatform);
+      
+        // Calculate a new PLATFORM_DELTA for the next platform
+        PLATFORM_DELTA = Math.random() * (JUMP_HEIGHT - PLAYER.sprite.height) + PLAYER.sprite.height;
+    }
+
+    //delete all Platforms that go out of bounds
+    for(let i=0; i<PLATFORMS.length; i++){
+        if(PLATFORMS[i].position_y > Screen.height){
+            delete PLATFORMS[i];
+        }
     }
 
     //Gameplay
