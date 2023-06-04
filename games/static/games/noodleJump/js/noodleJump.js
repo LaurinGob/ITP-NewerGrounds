@@ -5,7 +5,7 @@ const SCREEN_HEIGHT = 960;
 const BG_COLOR = 0xCCCCFF;
 const MAX_FPS = 60;
 const RES_URL = '../../static/games/noodleJump/res/';
-const MAX_PLATFORMS = 6;
+const INITIAL_PLATFORMS = 6;
 let SCORE = 0;
 
 let TAN_INPUT = 0;
@@ -34,17 +34,16 @@ let player_texture = PIXI.Texture.from(RES_URL + 'textures/meatball_player.png')
 const PLAYER = new Player();
 let PLATFORMS = [];
 let PLATFORM_DELTA;
-let JUMP_HEIGHT; //TODO: wert festlegen -> experimentell
+let JUMP_HEIGHT = 200; //TODO: wert festlegen -> experimentell
 
 //non-random initial platform spawn
-for (let i=0; i<MAX_PLATFORMS; i++){
+for (let i=0; i<INITIAL_PLATFORMS; i++){
     if(i == 0){
         PLATFORMS[i] = new Platform(SCREEN_WIDTH/2, SCREEN_HEIGHT-100);
     }
     else{
-        PLATFORMS[i] = new Platform((SCREEN_WIDTH/MAX_PLATFORMS) * i, (SCREEN_HEIGHT/MAX_PLATFORMS) * i);
+        PLATFORMS[i] = new Platform((SCREEN_WIDTH/INITIAL_PLATFORMS) * i, (SCREEN_HEIGHT/INITIAL_PLATFORMS) * i);
     }
-    PLATFORM_DELTA = (Math.random() * (JUMP_HEIGHT - PLAYER.sprite.height) + PLAYER.sprite.height);
 }
 
 
@@ -70,7 +69,7 @@ function gameLoop(delta) {
     }
 
     //Platform handling
-    for (let i=0; i<MAX_PLATFORMS; i++){
+    for (let i=0; i<PLATFORMS.length; i++){
         //update platform sprites
         PLATFORMS[i].updateSprite(SCORE);
         //check for collision with player
@@ -80,10 +79,12 @@ function gameLoop(delta) {
     }
 
     //New platform spawn
+    PLATFORM_DELTA = (Math.random() * (JUMP_HEIGHT - PLAYER.sprite.height) + PLAYER.sprite.height);
     //if the Delta above the top platform reaches a threshold of -10
-    if(PLATFORMS[PLATFORMS.length-1].position_y - PLATFORM_DELTA > -10){
+    if(PLATFORMS[PLATFORMS.length-1].position_y - PLATFORM_DELTA > 0){
         //a new platform is created above the top platform at vertical distance PLATFORM_DELTA
-        PLATFORMS.push(new Platform(Math.random() * SCREEN_WIDTH, PLATFORMS[PLATFORMS.length-1].position_y - PLATFORM_DELTA));
+        PLATFORMS[PLATFORMS.length] = new Platform(Math.random() * SCREEN_WIDTH, PLATFORMS[PLATFORMS.length-1].position_y - PLATFORM_DELTA);
+        newPlatformSprite(PLATFORMS[PLATFORMS.length-1]);
         //a new PLATFORM_DELTA is calculated for the next platform
         PLATFORM_DELTA = (Math.random() * (JUMP_HEIGHT - PLAYER.sprite.height) + PLAYER.sprite.height);
     }
@@ -123,7 +124,7 @@ function createSprites() {
     PLAYER.sprite.height = 100;
     PLAYER.sprite.position.set(0);
 
-    for (let i=0; i<MAX_PLATFORMS; i++){
+    for (let i=0; i<INITIAL_PLATFORMS; i++){
         PLATFORMS[i].sprite = new PIXI.Sprite(platform_texture);
         PLATFORMS[i].sprite.width = 200;
         PLATFORMS[i].sprite.height = 30;
@@ -135,7 +136,7 @@ function createSprites() {
 function setup(){
     GAME.stage.addChild(background);
     GAME.stage.addChild(PLAYER.sprite);
-    for (let i=0; i<MAX_PLATFORMS; i++){
+    for (let i=0; i<INITIAL_PLATFORMS; i++){
         GAME.stage.addChild(PLATFORMS[i].sprite);
     }
 
@@ -193,4 +194,13 @@ const controlPlayer = function(){
 const VelocityCalculation_x = function(){
     TAN_INPUT += 0.35;
     return 2*(Math.atan(TAN_INPUT-1)+1);
+}
+
+const newPlatformSprite = function(Platform){
+    let platform_texture = PIXI.Texture.from(RES_URL + 'textures/penne_platform.png');
+    Platform.sprite = new PIXI.Sprite(platform_texture);
+    Platform.sprite.width = 200;
+    Platform.sprite.height = 30;
+
+    GAME.stage.addChild(Platform.sprite);
 }
