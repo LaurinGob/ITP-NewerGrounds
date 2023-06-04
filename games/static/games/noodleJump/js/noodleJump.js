@@ -28,11 +28,15 @@ document.getElementById("canvasAnchor").appendChild(GAME.view);
 /* ~~~~~ Setup ~~~~~ */
 let background_texture;
 let background;
-let platform_texture = PIXI.Texture.from('../../static/games/noodleJump/res/textures/penne_platform.png');
-let player_texture = PIXI.Texture.from('../../static/games/noodleJump/res/textures/meatball_player.png');;
+let platform_texture = PIXI.Texture.from(RES_URL + 'textures/penne_platform.png');
+let player_texture = PIXI.Texture.from(RES_URL + 'textures/meatball_player.png');
 
 const PLAYER = new Player();
 let PLATFORMS = [];
+let PLATFORM_DELTA;
+let JUMP_HEIGHT; //TODO: wert festlegen -> experimentell
+
+//non-random initial platform spawn
 for (let i=0; i<MAX_PLATFORMS; i++){
     if(i == 0){
         PLATFORMS[i] = new Platform(SCREEN_WIDTH/2, SCREEN_HEIGHT-100);
@@ -40,6 +44,7 @@ for (let i=0; i<MAX_PLATFORMS; i++){
     else{
         PLATFORMS[i] = new Platform((SCREEN_WIDTH/MAX_PLATFORMS) * i, (SCREEN_HEIGHT/MAX_PLATFORMS) * i);
     }
+    PLATFORM_DELTA = (Math.random() * (JUMP_HEIGHT - PLAYER.sprite.height) + PLAYER.sprite.height);
 }
 
 
@@ -73,6 +78,16 @@ function gameLoop(delta) {
             PLAYER.velocity_y = -7;
         }
     }
+
+    //New platform spawn
+    //if the Delta above the top platform reaches a threshold of -10
+    if(PLATFORMS[PLATFORMS.length-1].position_y - PLATFORM_DELTA > -10){
+        //a new platform is created above the top platform at vertical distance PLATFORM_DELTA
+        PLATFORMS.push(new Platform(Math.random() * SCREEN_WIDTH, PLATFORMS[PLATFORMS.length-1].position_y - PLATFORM_DELTA));
+        //a new PLATFORM_DELTA is calculated for the next platform
+        PLATFORM_DELTA = (Math.random() * (JUMP_HEIGHT - PLAYER.sprite.height) + PLAYER.sprite.height);
+    }
+
     //Gameplay
     controlPlayer();
 
