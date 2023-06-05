@@ -3,6 +3,8 @@ let fallingSpeed = 3;
 var forkPng;
 var score = 0;
 var gameOver = false;
+/*var backgroundTexture;
+var backgroundSprite;*/
 
 //include Sound
 const jumpAudio = new Audio('/static/games/flappyNoodle/res/jumping_sound.mp3');
@@ -12,9 +14,6 @@ jumpAudio.volume = 1;
 jumpAudio.addEventListener('loadeddata', () => {
     console.log('Sound wurde geladen');
 });
-
-
-loadResources();
 
 // #################### PIXI SETUP
 // constants
@@ -32,25 +31,124 @@ const GAME = new PIXI.Application(
     }
 );
 
-// adds pixi canvas to selected dom
-document.getElementById("canvasAnchor").appendChild(GAME.view);
+const CANVASANCHOR = document.getElementById("canvasAnchor");
 
-// #################### UI setup
-const Score = document.getElementById("score");
-const GameOver = document.getElementById("gameOver");
-const Restart = document.getElementById("restart");
+// ####################### UI Setup
+/*/Background
+backgroundTexture = PIXI.Texture.from('/static/games/flappyNoodle/res/BG_Holztisch.jpg');
+backgroundSprite = new PIXI.TilingSprite(backgroundTexture, GAME.renderer.width, GAME.renderer.height);
+GAME.stage.addChild(backgroundSprite);*/
 
-var updateUi = function() {
-    //update Score
-    Score.innerText = score;
+// set up ui elements and add to uianchor
+const STARTSCREEN_ANCHOR = document.createElement("div"); // the root element of UI
+STARTSCREEN_ANCHOR.setAttribute("id", "uiAnchor");
+STARTSCREEN_ANCHOR.style.fontFamily = 'Calibri'; // defines font for ui
+STARTSCREEN_ANCHOR.style.fontWeight = 'bolder'; // defines font for ui
+
+//Start Screen
+const STARTSCREEN_ELEMENT = document.createElement("div");
+STARTSCREEN_ELEMENT.position = 'absolute';
+
+const TITLE_ELEMENT = document.createElement("div");
+TITLE_ELEMENT.setAttribute("id", "title");
+TITLE_ELEMENT.setAttribute("style", "position: absolute; top: 100px; left: 30px; font-family: Calibri; font-weight: bolder; color: rgb(233, 167, 25)");
+const TITLE_H1 = document.createElement("h1");
+TITLE_H1.innerText = 'Flappy Noodles';
+TITLE_H1.setAttribute("style", "font-size: 150px");
+TITLE_ELEMENT.appendChild(TITLE_H1);
+
+const STARTBUTTON_ELEMENT =  document.createElement("div");
+STARTBUTTON_ELEMENT.setAttribute("id", "startButton");
+STARTBUTTON_ELEMENT.setAttribute("style", "position: absolute; top: 270px; left: 360px; font-family: Calibri; font-weight: bolder; color: rgb(233, 167, 25)");
+STARTBUTTON_ELEMENT.addEventListener("click", startGame);
+const STARTBUTTON_H1 = document.createElement("h1");
+STARTBUTTON_H1.innerText = 'Start';
+STARTBUTTON_H1.setAttribute("style", "font-size: 100px");
+STARTBUTTON_ELEMENT.appendChild(STARTBUTTON_H1);
+
+STARTSCREEN_ELEMENT.appendChild(STARTBUTTON_ELEMENT);
+STARTSCREEN_ELEMENT.appendChild(TITLE_ELEMENT);
+STARTSCREEN_ANCHOR.appendChild(STARTSCREEN_ELEMENT);
+CANVASANCHOR.style.position = 'relative'; // VERY IMPORTANT !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+CANVASANCHOR.appendChild(STARTSCREEN_ANCHOR);
+
+
+
+function startGame(){
+    //Remove Startscreen
+    STARTSCREEN_ANCHOR.replaceChildren();
+    STARTSCREEN_ANCHOR.remove();
+    
+    // adds the gameloop function to ticker (pixi.js)
+    GAME.ticker.add(gameLoop);
+    GAME.ticker.maxFPS = MAX_FPS;
+
+    // ####################### ui elements
+
+    // set up ui elements and add to uianchor
+    const UIANCHOR = document.createElement("div"); // the root element of UI
+    UIANCHOR.setAttribute("id", "uiAnchor");
+    UIANCHOR.style.fontFamily = 'Calibri'; // defines font for ui
+    UIANCHOR.style.fontWeight = 'bolder'; // defines font for ui
+
+    // positioning
+    const UIPOSITION = document.createElement("div"); // sub element of UI, used to position elements
+    UIPOSITION.style.position = 'absolute';
+    UIPOSITION.style.top = '10px';
+    UIPOSITION.style.left = '10px';
+    UIANCHOR.appendChild(UIPOSITION);
+
+    const SCORE_ELEMENT = document.createElement("h1"); // generate a dom to write to
+    SCORE_ELEMENT.innerText = 'Score: '; // static text for the element
+    const SCORE_SPAN = document.createElement("span"); // the elements containing the dynamic text
+    SCORE_SPAN.setAttribute("id", "score"); // to later call the span
+    SCORE_ELEMENT.appendChild(SCORE_SPAN); // add span to element
+    UIPOSITION.appendChild(SCORE_ELEMENT); // add to UIPosition
+
+    //Game Over tag
+    const GAMEOVER_DIV = document.createElement("div");
+    GAMEOVER_DIV.setAttribute("id", "gameOver");
+    GAMEOVER_DIV.setAttribute("style", "position: absolute; top: 100px; left: 30px; font-family: Calibri; font-weight: bolder; color: red; display: none;");
+    const GAMEOVER_H1 = document.createElement("h1"); 
+    GAMEOVER_H1.setAttribute("style", "font-size: 180px")
+    GAMEOVER_H1.innerText = 'GAME OVER';
+    GAMEOVER_DIV.appendChild(GAMEOVER_H1);
+    UIANCHOR.appendChild(GAMEOVER_DIV);
+
+    //Restart tag
+    const RESTART_DIV = document.createElement("div");
+    RESTART_DIV.setAttribute("id", "restart");
+    RESTART_DIV.setAttribute("style", "position: absolute; top: 300px; left: 240px;font-family: Calibri; font-weight: bolder; color: white; display: none;");
+    const RESTART_H1 = document.createElement("h1"); 
+    RESTART_H1.innerText = 'Press "r" to restart the game';
+    RESTART_DIV.appendChild(RESTART_H1);
+    UIANCHOR.appendChild(RESTART_DIV);
+
+    // adds pixi canvas to selected dom
+
+    CANVASANCHOR.appendChild(GAME.view);
+    CANVASANCHOR.appendChild(UIANCHOR);
+
+
 }
 
-// adds the gameloop function to ticker (pixi.js)
-GAME.ticker.add(gameLoop);
-GAME.ticker.maxFPS = MAX_FPS;
+
+//Update UI / Background
+var updateUi = function() {
+    //update Score
+    let SCORE = document.getElementById("score");
+    SCORE.innerText = score;
+}
+
+/*function updateBackground(){
+    backgroundSprite.tilePosition.x -= 4;
+}*/
 
 
+//Load forks
+loadResources();
 // ############### GAME SETUP
+
 
 //create Player
 const player = PIXI.Sprite.from('/static/games/flappyNoodle/res/Noodle.png');
@@ -61,7 +159,7 @@ player.scale.set(0.06);
 GAME.stage.addChild(player);
 
 // Forks
-let forks = Array()
+var forks = Array()
 async function loadResources(){
     forkPng = await PIXI.Assets.load('/static/games/flappyNoodle/res/Gabel.png');
     
@@ -134,16 +232,16 @@ function getRotation(velocity){
 
 //AABB intersection
 const AABBintersection = function(boxA, boxB) {
-    if (boxA.right < (boxB.left + 15)) {
+    if (boxA.right < (boxB.left + 25)) {
         return false;
     }
-    if (boxA.left > (boxB.right - 15)) {
+    if (boxA.left > (boxB.right - 25)) {
         return false;
     }
-    if (boxA.bottom < (boxB.top + 5)) {
+    if (boxA.bottom < (boxB.top + 8)) {
         return false;
     }
-    if (boxA.top > (boxB.bottom - 5)) {
+    if (boxA.top > (boxB.bottom - 8)) {
         return false;
     }
     return true;
@@ -158,7 +256,7 @@ function checkBounds(player){
     }
 
     //check lower bounds
-    if(player.position.y > (SCREEN_HEIGHT - player.height/2) && gameOver == false){
+    if(player.position.y > (SCREEN_HEIGHT - player.height/2) && !gameOver){
         velocity = 0;
         player.rotation = 0
         player.position.y = SCREEN_HEIGHT - player.height/2;
@@ -167,22 +265,23 @@ function checkBounds(player){
 
 //Game Over
 function gameOverSettings(){
-    //show Death Screen
-    GameOver.style["display"] = "block";
-    Restart.style["display"] = "block";
-
+    let GAMEOVER = document.getElementById("gameOver");
+    GAMEOVER.style.display = "block";
+    let RESTART = document.getElementById("restart");
+    RESTART.style.display = "block";
     //enable restart
     if(keys['r']){
-        window.location.reload();
+        window.location.reload(); //eventuell startGame();
     }
 }
 
-// Vars
+
+
+//Player vars
 let jumpVelocity = 10;
 let velocity = jumpVelocity;
 let spaceHasBeenPressed = false;
 let rotationIncrement = -0.05;
-
 
 // Game loop
 function gameLoop(delta) {
@@ -217,8 +316,9 @@ function gameLoop(delta) {
             }
         })
 
-        //Update Score
+        //Update Score / Background
         updateUi();
+        //updateBackground();
     }
     else{
         gameOverSettings();
