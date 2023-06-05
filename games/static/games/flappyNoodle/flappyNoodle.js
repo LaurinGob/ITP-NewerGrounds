@@ -3,8 +3,8 @@ let fallingSpeed = 3;
 var forkPng;
 var score = 0;
 var gameOver = false;
-/*var backgroundTexture;
-var backgroundSprite;*/
+var backgroundTexture;
+var backgroundSprite;
 
 //include Sound
 const jumpAudio = new Audio('/static/games/flappyNoodle/res/jumping_sound.mp3');
@@ -34,10 +34,10 @@ const GAME = new PIXI.Application(
 const CANVASANCHOR = document.getElementById("canvasAnchor");
 
 // ####################### UI Setup
-/*/Background
+//Background
 backgroundTexture = PIXI.Texture.from('/static/games/flappyNoodle/res/BG_Holztisch.jpg');
 backgroundSprite = new PIXI.TilingSprite(backgroundTexture, GAME.renderer.width, GAME.renderer.height);
-GAME.stage.addChild(backgroundSprite);*/
+GAME.stage.addChild(backgroundSprite);
 
 // set up ui elements and add to uianchor
 const STARTSCREEN_ANCHOR = document.createElement("div"); // the root element of UI
@@ -140,9 +140,9 @@ var updateUi = function() {
     SCORE.innerText = score;
 }
 
-/*function updateBackground(){
+function updateBackground(){
     backgroundSprite.tilePosition.x -= 4;
-}*/
+}
 
 
 //Load forks
@@ -318,7 +318,7 @@ function gameLoop(delta) {
 
         //Update Score / Background
         updateUi();
-        //updateBackground();
+        updateBackground();
     }
     else{
         gameOverSettings();
