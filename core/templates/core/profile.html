@@ -1,0 +1,13 @@
+
+{% extends 'core/base.html' %}
+
+{% load static %}
+
+{% block content %}
+
+profile page!<br>
+
+Username: {{ user.username }}<br>
+e-Mail: {{ user.email }}<br> {# See core/models.py for the available attributes on the user #}
+
+{% endblock %}

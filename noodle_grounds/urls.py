@@ -17,7 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
-from core.views import vw_login, vw_register, index
+from core.views import vw_login, vw_register, vw_profile, index
 from games.views import sampleGame  # Hier die Minispiel View von /games/views.py importieren
 from games.views import pixiexample
 from games.views import playerexample
@@ -30,6 +30,7 @@ urlpatterns = [
     path('', index, name='index'),
     path('login/', vw_login, name="login"),
     path('register/', vw_register, name="register"),
+    path('profiles/<str:username>', vw_profile, name="profiles"),
     
     # Games; hier Pfad zur Minispiel View definieren
     path('sampleGame', sampleGame, name="sampleGame"),

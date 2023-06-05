@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse, Http404, HttpRequest
 from django.contrib.auth import authenticate, login, logout
 
@@ -108,3 +108,12 @@ def vw_register(request: HttpRequest):
                'has_success_messages': has_success_messages}
 
     return render(request, 'core/register.html', context)
+
+    
+def vw_profile(request: HttpRequest, username: str):
+    context = {}
+
+    user = get_object_or_404(User, username=username)
+    context['user'] = user
+
+    return render(request, 'core/profile.html', context)

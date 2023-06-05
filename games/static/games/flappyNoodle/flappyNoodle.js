@@ -54,6 +54,8 @@ async function loadResources(){
         // Top fork
         let forkTop = new PIXI.Sprite(forkPng);
         forkTop.scale.set(0.4);
+
+        forkTop.pivot.set(forkTop.width/2, forkTop.height/2);
         forkTop.rotation = Math.PI;
 
         forkTop.position.x = SCREEN_WIDTH;
