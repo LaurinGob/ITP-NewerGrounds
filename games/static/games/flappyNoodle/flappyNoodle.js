@@ -6,13 +6,28 @@ var gameOver = false;
 var backgroundTexture;
 var backgroundSprite;
 
+//Player vars
+const player = PIXI.Sprite.from('/static/games/flappyNoodle/res/images/Noodle.png');
+let jumpVelocity = 10;
+let velocity = jumpVelocity;
+let spaceHasBeenPressed = false;
+let rotationIncrement = -0.05;
+
 //include Sound
-const jumpAudio = new Audio('/static/games/flappyNoodle/res/jumping_sound.mp3');
+const jumpAudio = new Audio('/static/games/flappyNoodle/res/sounds/jumping_sound.mp3');
 jumpAudio.loop = false;
 jumpAudio.volume = 1;
 
+const gameOverAudio = new Audio('/static/games/flappyNoodle/res/sounds/gameOver.mp3');
+gameOverAudio.loop = false;
+gameOverAudio.volume = 1;
+
+gameOverAudio.addEventListener('loadeddata', () => {
+    console.log('gameOver sound wurde geladen');
+});
+
 jumpAudio.addEventListener('loadeddata', () => {
-    console.log('Sound wurde geladen');
+    console.log('jumping sound wurde geladen');
 });
 
 // #################### PIXI SETUP
@@ -35,7 +50,7 @@ const CANVASANCHOR = document.getElementById("canvasAnchor");
 
 // ####################### UI Setup
 //Background
-backgroundTexture = PIXI.Texture.from('/static/games/flappyNoodle/res/BG_Holztisch.jpg');
+backgroundTexture = PIXI.Texture.from('/static/games/flappyNoodle/res/images/BG_Holztisch.jpg');    
 backgroundSprite = new PIXI.TilingSprite(backgroundTexture, GAME.renderer.width, GAME.renderer.height);
 GAME.stage.addChild(backgroundSprite);
 
@@ -51,7 +66,7 @@ STARTSCREEN_ELEMENT.position = 'absolute';
 
 const TITLE_ELEMENT = document.createElement("div");
 TITLE_ELEMENT.setAttribute("id", "title");
-TITLE_ELEMENT.setAttribute("style", "position: absolute; top: 100px; left: 30px; font-family: Calibri; font-weight: bolder; color: rgb(233, 167, 25)");
+TITLE_ELEMENT.setAttribute("style", "position: absolute; top: 100px; left: 13px; font-family: Calibri; font-weight: bolder; color: rgb(233, 200, 20)");
 const TITLE_H1 = document.createElement("h1");
 TITLE_H1.innerText = 'Flappy Noodles';
 TITLE_H1.setAttribute("style", "font-size: 150px");
@@ -61,6 +76,12 @@ const STARTBUTTON_ELEMENT =  document.createElement("div");
 STARTBUTTON_ELEMENT.setAttribute("id", "startButton");
 STARTBUTTON_ELEMENT.setAttribute("style", "position: absolute; top: 270px; left: 360px; font-family: Calibri; font-weight: bolder; color: rgb(233, 167, 25)");
 STARTBUTTON_ELEMENT.addEventListener("click", startGame);
+STARTBUTTON_ELEMENT.addEventListener("mouseover", function() {
+    STARTBUTTON_ELEMENT.style.textShadow = "0 0 10px black";
+});
+STARTBUTTON_ELEMENT.addEventListener("mouseout", function() {
+    STARTBUTTON_ELEMENT.style.textShadow = "none";
+});
 const STARTBUTTON_H1 = document.createElement("h1");
 STARTBUTTON_H1.innerText = 'Start';
 STARTBUTTON_H1.setAttribute("style", "font-size: 100px");
@@ -71,6 +92,7 @@ STARTSCREEN_ELEMENT.appendChild(TITLE_ELEMENT);
 STARTSCREEN_ANCHOR.appendChild(STARTSCREEN_ELEMENT);
 CANVASANCHOR.style.position = 'relative'; // VERY IMPORTANT !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 CANVASANCHOR.appendChild(STARTSCREEN_ANCHOR);
+CANVASANCHOR.appendChild(GAME.view);
 
 
 
@@ -82,6 +104,16 @@ function startGame(){
     // adds the gameloop function to ticker (pixi.js)
     GAME.ticker.add(gameLoop);
     GAME.ticker.maxFPS = MAX_FPS;
+
+    //Load forks
+    loadResources();
+
+    //set up Player
+    player.anchor.set(0.5);
+    player.position.x = 200;
+    player.position.y = SCREEN_HEIGHT/2;
+    player.scale.set(0.06);
+    GAME.stage.addChild(player);
 
     // ####################### ui elements
 
@@ -99,6 +131,7 @@ function startGame(){
     UIANCHOR.appendChild(UIPOSITION);
 
     const SCORE_ELEMENT = document.createElement("h1"); // generate a dom to write to
+    SCORE_ELEMENT.setAttribute("style", "color: white;");
     SCORE_ELEMENT.innerText = 'Score: '; // static text for the element
     const SCORE_SPAN = document.createElement("span"); // the elements containing the dynamic text
     SCORE_SPAN.setAttribute("id", "score"); // to later call the span
@@ -125,8 +158,6 @@ function startGame(){
     UIANCHOR.appendChild(RESTART_DIV);
 
     // adds pixi canvas to selected dom
-
-    CANVASANCHOR.appendChild(GAME.view);
     CANVASANCHOR.appendChild(UIANCHOR);
 
 
@@ -144,24 +175,15 @@ function updateBackground(){
     backgroundSprite.tilePosition.x -= 4;
 }
 
-
-//Load forks
-loadResources();
 // ############### GAME SETUP
 
 
-//create Player
-const player = PIXI.Sprite.from('/static/games/flappyNoodle/res/Noodle.png');
-player.anchor.set(0.5);
-player.position.x = 200;
-player.position.y = SCREEN_HEIGHT/2;
-player.scale.set(0.06);
-GAME.stage.addChild(player);
+
 
 // Forks
 var forks = Array()
 async function loadResources(){
-    forkPng = await PIXI.Assets.load('/static/games/flappyNoodle/res/Gabel.png');
+    forkPng = await PIXI.Assets.load('/static/games/flappyNoodle/res/images/Gabel.png');
     
     //sets 2 sec Intervall -> spawns 1 pair of forks every 2 seconds
     setInterval(() => {
@@ -213,7 +235,7 @@ async function loadResources(){
 
       
 //play audio
-function playAudio() { 
+function playJumpingAudio() { 
     const newSound = jumpAudio.cloneNode();
     newSound.play(); 
 } 
@@ -265,23 +287,25 @@ function checkBounds(player){
 
 //Game Over
 function gameOverSettings(){
+    gameOverAudio.play();
     let GAMEOVER = document.getElementById("gameOver");
     GAMEOVER.style.display = "block";
     let RESTART = document.getElementById("restart");
     RESTART.style.display = "block";
-    //enable restart
-    if(keys['r']){
-        window.location.reload(); //eventuell startGame();
-    }
+
+    setTimeout(() => {
+        // Stops the loop
+        GAME.ticker.stop();
+      }, 1500);
 }
 
-
-
-//Player vars
-let jumpVelocity = 10;
-let velocity = jumpVelocity;
-let spaceHasBeenPressed = false;
-let rotationIncrement = -0.05;
+//If the game is gameOver you are able to press "r" to restart the game
+document.addEventListener('keydown', function(event) {
+    if (event.key === 'r' && gameOver == true) {
+      // Rufe die Funktion zum Neustarten des Spiels auf
+      window.location.reload(); //eventuell startGame();
+    }
+  });
 
 // Game loop
 function gameLoop(delta) {
@@ -296,7 +320,7 @@ function gameLoop(delta) {
         // Player controls
         if(keys[' '] && !spaceHasBeenPressed){
             velocity = jumpVelocity;
-            playAudio();
+            playJumpingAudio();
 
             spaceHasBeenPressed = true;
         }
