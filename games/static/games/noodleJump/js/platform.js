@@ -16,8 +16,4 @@ class Platform{
         this.sprite.position.x = this.position_x;
         this.sprite.position.y = this.position_y + SCORE;
     }
-
-    movePlatform(SCORE){
-        this.position_y += SCORE;
-    }
 }

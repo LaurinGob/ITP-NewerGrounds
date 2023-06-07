@@ -1,11 +1,11 @@
 // #################### SETUP
 // constants
-const SCREEN_WIDTH = 540;
+const SCREEN_WIDTH = 230;
 const SCREEN_HEIGHT = 960;
 const BG_COLOR = 0xCCCCFF;
 const MAX_FPS = 60;
 const RES_URL = '../../static/games/noodleJump/res/';
-const INITIAL_PLATFORMS = 6;
+const INITIAL_PLATFORMS = 2;
 let SCORE = 0;
 
 let TAN_INPUT = 0;
@@ -34,17 +34,13 @@ let player_texture = PIXI.Texture.from(RES_URL + 'textures/meatball_player.png')
 const PLAYER = new Player();
 let PLATFORMS = [];
 let PLATFORM_DELTA;
-let JUMP_HEIGHT = 200; //TODO: wert festlegen -> experimentell
+let JUMP_HEIGHT = 180; //TODO: wert festlegen -> experimentell
+let JUMP_VELOCITY = -7;
+
 
 //non-random initial platform spawn
-for (let i=0; i<INITIAL_PLATFORMS; i++){
-    if(i == 0){
-        PLATFORMS[i] = new Platform(SCREEN_WIDTH/2, SCREEN_HEIGHT-100);
-    }
-    else{
-        PLATFORMS[i] = new Platform((SCREEN_WIDTH/INITIAL_PLATFORMS) * i, (SCREEN_HEIGHT/INITIAL_PLATFORMS) * i);
-    }
-}
+PLATFORMS[0] = new Platform(SCREEN_WIDTH/2, SCREEN_HEIGHT-100);
+PLATFORMS[1] = new Platform(SCREEN_WIDTH/3, SCREEN_HEIGHT-200);    
 
 
 
@@ -62,7 +58,7 @@ function gameLoop(delta) {
 
     //Calculating Score
     if(PLAYER.sprite.position.y < SCREEN_HEIGHT/3 && PLAYER.velocity_y <0){
-        SCORE -= PLAYER.velocity_y * delta;
+        SCORE -= PLAYER.velocity_y;
     }
     else{
         PLAYER.applyVelocity_y(delta);
@@ -74,7 +70,7 @@ function gameLoop(delta) {
         PLATFORMS[i].updateSprite(SCORE);
         //check for collision with player
         if(playerJump(PLAYER.sprite.getBounds(), PLATFORMS[i].sprite.getBounds()) && PLAYER.velocity_y >= 0){
-            PLAYER.velocity_y = -7;
+            PLAYER.velocity_y = JUMP_VELOCITY;
         }
     }
 
@@ -97,6 +93,13 @@ function gameLoop(delta) {
             delete PLATFORMS[i];
         }
     }
+
+    //debugging
+    for(let i=0; i<PLATFORMS.length-1; i++){
+        if(PLATFORMS[i].position_x == 0){
+            console.log(PLATFORMS[i]);
+        }
+    } 
 
     //Gameplay
     controlPlayer();
