@@ -17,10 +17,6 @@ const GAME = new PIXI.Application(
 // adds pixi canvas to selected dom
 document.getElementById("canvasAnchor").appendChild(GAME.view);
 
-// adds the gameloop function to ticker (pixi.js)
-GAME.ticker.add(gameLoop);
-GAME.ticker.maxFPS = MAX_FPS;
-
 // #################### UI setup
 const uiRockCounter = document.getElementById("uiRockCounter");
 const uiHealth = document.getElementById("uiHealth");
@@ -40,7 +36,7 @@ x.loop = true;
 x.play();
 */
 
-let background = PIXI.Sprite.from("../../static/games/pixiexample/res/textures/background.jpg");
+let background = PIXI.Sprite.from("../../static/games/pixiexample/res/textures/BG_Holztisch.jpg");
 background.anchor.set(0.5);
 background.width = SCREEN_WIDTH;
 background.height = SCREEN_HEIGHT;
@@ -75,23 +71,40 @@ groundbreak.loop = false;
 let enemyArray = [];
 let numberOfStones = 20;
 let speed = 15;
-let fallingspeed = 6;
+let playerFallingSpeed = 6;
+let ramenFallingSpeed = 2;
 let rockCounter = 0;
 let health = 10;
 let chain = 0;
 let comboMultiplier = 0;
 
-const enemySprite = PIXI.Texture.from("../../static/games/pixiexample/res/textures/enemy.png");
+const enemyTexture1 = PIXI.Texture.from("../../static/games/pixiexample/res/textures/Ramen_blue.png"); 
+const enemyTexture2 = PIXI.Texture.from("../../static/games/pixiexample/res/textures/Ramen_green.png");
+const enemyTexture3 = PIXI.Texture.from("../../static/games/pixiexample/res/textures/Ramen_red.png");
+
 for (let i = 0; i < numberOfStones; i++) {
-    enemyArray.push(PIXI.Sprite.from(enemySprite));
+    if(i % 3 == 0){
+        enemyArray.push(PIXI.Sprite.from(enemyTexture1));
+    }
+    else if(i % 3 == 1){
+        enemyArray.push(PIXI.Sprite.from(enemyTexture2));
+    }
+    else{
+        enemyArray.push(PIXI.Sprite.from(enemyTexture3));
+    }
+    
+    enemyArray[i].scale.set(0.1, 0.1);
     enemyArray[i].anchor.set(0.5);
     enemyArray[i].position.x = getRandomInt(SCREEN_WIDTH);
-    enemyArray[i].position.y = SCREEN_HEIGHT / 2 + getRandomInt(SCREEN_HEIGHT * 0.5);
-    tempnumber = 1 + Math.random();
-    enemyArray[i].scale.set(tempnumber,tempnumber);
+    enemyArray[i].position.y = Math.random() * 300;
+    //tempnumber = 1 + Math.random();
+    //enemyArray[i].scale.set(tempnumber,tempnumber);
     GAME.stage.addChild(enemyArray[i]);
 }
 
+// adds the gameloop function to ticker (pixi.js)
+GAME.ticker.add(gameLoop);
+GAME.ticker.maxFPS = MAX_FPS;
 
 let y_velocity = 0;
 let player_airborne = false;
@@ -99,11 +112,18 @@ let player_jumping = false;
 let jump_release = true;
 let prepare_impact = true;
 
+//Game Over Condition
+function checkGameOver(){
+    if(health <= 0){
+        GAME.ticker.stop();
+    }
+}
+
 // #################### gameloop
 function gameLoop(delta) {
     // main gameloop for the game logic
     if (player.position.y < SCREEN_HEIGHT - floor.height - (player.height/2) || y_velocity < 0) {
-        y_velocity += fallingspeed * delta;
+        y_velocity += playerFallingSpeed * delta;
         if (y_velocity > 0) {
             player_jumping = false;
             prepare_impact = true;
@@ -118,9 +138,9 @@ function gameLoop(delta) {
             groundbreak.position.y = SCREEN_HEIGHT - floor.height / 2;
             groundbreak.gotoAndStop(0);
             groundbreak.play();
-            prepare_impact = false;
             groundbreak.visible = true;
             setTimeout(function() {groundbreak.visible = false;}, 700);
+            prepare_impact = false;
             setTimeout(function() {jump_release = true;player.gotoAndStop(1);}, 400);
         }
     }
@@ -154,8 +174,8 @@ function gameLoop(delta) {
                 // eat
                 enemyArray[i].position.x = getRandomInt(SCREEN_WIDTH);
                 enemyArray[i].position.y = 0;
-                tempnumber = 1 + Math.random();
-                enemyArray[i].scale.set(tempnumber,tempnumber);
+                //tempnumber = 1 + Math.random();
+                //enemyArray[i].scale.set(tempnumber,tempnumber);
                 chain++;
                 comboMultiplier = Math.floor(chain/5);
                 rockCounter += comboMultiplier;
@@ -171,13 +191,15 @@ function gameLoop(delta) {
                 updateUi();
             }
         }
-        enemyArray[i].position.y += (fallingspeed / enemyArray[i].scale.x) * delta;
+        enemyArray[i].position.y += ramenFallingSpeed + (0.1 * Math.random()) * delta;
 
         if (enemyArray[i].position.y > SCREEN_HEIGHT) {
             enemyArray[i].position.x = getRandomInt(SCREEN_WIDTH);
             enemyArray[i].position.y = 0;
         }
     }
+
+    checkGameOver();
 }
 
 // #################### helper functions
