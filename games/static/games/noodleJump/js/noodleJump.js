@@ -31,6 +31,9 @@ let background_texture;
 let background;
 let platform_texture = PIXI.Texture.from(RES_URL + 'textures/penne_platform.png');
 let player_texture = PIXI.Texture.from(RES_URL + 'textures/meatball_player.png');
+let player_texture_squish = PIXI.Texture.from(RES_URL + 'textures/Player_Squish_horizontal.png');
+let player_texture_flying = PIXI.Texture.from(RES_URL + 'textures/Player_Squish_vertical.png');
+
 
 const PLAYER = new Player();
 let PLATFORMS = [];
@@ -72,7 +75,7 @@ UI_GAMEOVER.style.height = '100%';
 UI_GAMEOVER.style.position = 'absolute';
 UI_GAMEOVER.style.backgroundColor = '#ddddff';
 
-UI_GAMEOVER_TEXT = document.createElement("div");
+const UI_GAMEOVER_TEXT = document.createElement("div");
 UI_GAMEOVER_TEXT.setAttribute("id", "gameover_div");
 UI_GAMEOVER_TEXT.setAttribute("class", "text-center");
 UI_GAMEOVER_TEXT.style.fontFamily = 'Calibri'; // defines font for ui
@@ -81,7 +84,7 @@ UI_GAMEOVER_TEXT.style.fontSize = '48px';
 UI_GAMEOVER_TEXT.style.width = '100%';
 UI_GAMEOVER.appendChild(UI_GAMEOVER_TEXT);
 
-UI_RELOAD_BTN = document.createElement("button");
+const UI_RELOAD_BTN = document.createElement("button");
 UI_RELOAD_BTN.setAttribute("id", "reload_btn");
 UI_RELOAD_BTN.setAttribute("class", "btn btn-info");
 UI_RELOAD_BTN.textContent = "RESTART";
@@ -108,6 +111,20 @@ function gameLoop(delta) {
     PLAYER.applyVelocity_x(delta);
     PLAYER.mapWrap();
     PLAYER.updateSprite();
+    PLAYER.applyRotation();
+    
+
+    if (!PLAYER.isSquished && PLAYER.velocity_y > 3) {
+        PLAYER.sprite.texture = player_texture_flying;
+    } else if (!PLAYER.isSquished && PLAYER.velocity_y <= 3) {
+        PLAYER.sprite.texture = player_texture;
+        // PLAYER.sprite.height = 100; 
+        // PLAYER.sprite.width = 100;
+    } else {
+        PLAYER.sprite.texture = player_texture_squish;
+        // PLAYER.sprite.height = 80;
+        // PLAYER.sprite.width = 120;
+    }
 
     //Calculating Score
     if(PLAYER.sprite.position.y < SCREEN_HEIGHT/3 && PLAYER.velocity_y <0){
@@ -124,6 +141,12 @@ function gameLoop(delta) {
         //check for collision with player
         if(playerJump(PLAYER.sprite.getBounds(), PLATFORMS[i].sprite.getBounds()) && PLAYER.velocity_y >= 0){
             PLAYER.velocity_y = JUMP_VELOCITY;
+            PLAYER.isSquished = true;
+            PLAYER.rotationLocked = false;
+            PLAYER.sprite.angle = 0;
+            setTimeout(() => {
+                PLAYER.isSquished = false;
+            }, 150);
         }
     }
 
@@ -194,6 +217,7 @@ function createSprites() {
     PLAYER.sprite = new PIXI.Sprite(player_texture);
     PLAYER.sprite.width = 100;
     PLAYER.sprite.height = 100;
+    PLAYER.sprite.anchor.set(0.5);
     PLAYER.sprite.position.set(0);
 
     for (let i=0; i<INITIAL_PLATFORMS; i++){

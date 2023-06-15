@@ -4,7 +4,9 @@ class Player {
         this.position_y = SCREEN_HEIGHT/2;
         this.velocity_x = 0;
         this.velocity_y = 0;
-
+        this.isSquished = false;
+        this.rotationLocked = false;
+        this.rotation = 0;
         this.sprite;
 
         /*this.sprite.beginFill(0xff9999);
@@ -47,4 +49,7 @@ class Player {
         }
     }
 
+    applyRotation() {
+        this.sprite.angle += this.velocity_x;
+    }
 }
