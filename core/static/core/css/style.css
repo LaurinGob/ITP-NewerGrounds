@@ -1,6 +1,10 @@
 /*~~~~~~~~~~~~~~~~~ body ~~~~~~~~~~~~~~~~~*/
-h1{
-    font-family: "Comic Sans MS", cursive;
+body{
+    background-color: wheat !important;
+}
+
+.row li{
+    background-color: wheat !important;
 }
 
 /*~~~~~~~~~~~~~~~~~ game canvas ~~~~~~~~~~~~~~~~~*/

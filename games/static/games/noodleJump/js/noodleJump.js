@@ -1,6 +1,6 @@
 // #################### SETUP
 // constants
-const SCREEN_WIDTH = 230;
+const SCREEN_WIDTH = 540;
 const SCREEN_HEIGHT = 960;
 const BG_COLOR = 0xCCCCFF;
 const MAX_FPS = 60;
@@ -34,6 +34,9 @@ let player_texture = PIXI.Texture.from(RES_URL + 'textures/meatball_player.png')
 const PLAYER = new Player();
 let PLATFORMS = [];
 let PLATFORM_DELTA;
+let PLATFORM_WIDTH = 200;
+let PLATFORM_HEIGHT = 30;
+
 let JUMP_HEIGHT = 180; //TODO: wert festlegen -> experimentell
 let JUMP_VELOCITY = -7;
 
@@ -77,9 +80,9 @@ function gameLoop(delta) {
     //New platform spawn
     PLATFORM_DELTA = (Math.random() * (JUMP_HEIGHT - PLAYER.sprite.height) + PLAYER.sprite.height);
     //if the Delta above the top platform reaches a threshold
-    if (PLATFORMS[PLATFORMS.length - 1].position_y - PLATFORM_DELTA > -Number.MAX_SAFE_INTEGER) {
+    if (PLATFORMS[PLATFORMS.length - 1].position_y - PLATFORM_DELTA > -SCORE-20) {
         // Create a new platform above the top platform at vertical distance PLATFORM_DELTA
-        const newPlatform = new Platform(Math.random() * SCREEN_WIDTH, PLATFORMS[PLATFORMS.length - 1].position_y - PLATFORM_DELTA);
+        const newPlatform = new Platform(Math.random() * SCREEN_WIDTH-PLATFORM_WIDTH/4, PLATFORMS[PLATFORMS.length - 1].position_y - PLATFORM_DELTA);
         newPlatformSprite(newPlatform);
         PLATFORMS.push(newPlatform);
       
@@ -88,10 +91,8 @@ function gameLoop(delta) {
     }
 
     //delete all Platforms that go out of bounds
-    for(let i=0; i<PLATFORMS.length; i++){
-        if(PLATFORMS[i].position_y > Screen.height){
-            delete PLATFORMS[i];
-        }
+    if(PLATFORMS[0].position_y+SCORE > Screen.height){
+        delete PLATFORMS[0];
     }
 
     //debugging
@@ -112,7 +113,7 @@ function gameLoop(delta) {
 //--------------------------- Setup Functions --------------------------------------------------
 
 async function loadRessources() {
-    background_texture = await PIXI.Assets.load('../../static/games/noodleJump/res/textures/background.avif');
+    background_texture = await PIXI.Assets.load('../../static/games/noodleJump/res/textures/background.jpg');
 
     /*
     platform_texture = await PIXI.Assets.load('../../static/games/noodleJump/res/textures/penne_platform.png');
@@ -138,8 +139,8 @@ function createSprites() {
 
     for (let i=0; i<INITIAL_PLATFORMS; i++){
         PLATFORMS[i].sprite = new PIXI.Sprite(platform_texture);
-        PLATFORMS[i].sprite.width = 200;
-        PLATFORMS[i].sprite.height = 30;
+        PLATFORMS[i].sprite.width = PLATFORM_WIDTH;
+        PLATFORMS[i].sprite.height = PLATFORM_HEIGHT;
     }
     
     setup();
@@ -211,8 +212,8 @@ const VelocityCalculation_x = function(){
 const newPlatformSprite = function(Platform){
     let platform_texture = PIXI.Texture.from(RES_URL + 'textures/penne_platform.png');
     Platform.sprite = new PIXI.Sprite(platform_texture);
-    Platform.sprite.width = 200;
-    Platform.sprite.height = 30;
+    Platform.sprite.width = PLATFORM_WIDTH;
+    Platform.sprite.height = PLATFORM_HEIGHT;
 
     GAME.stage.addChild(Platform.sprite);
 }
