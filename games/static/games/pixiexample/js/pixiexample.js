@@ -44,8 +44,10 @@ background.position.x = SCREEN_WIDTH/2;
 background.position.y = SCREEN_HEIGHT/2;
 GAME.stage.addChild(background);
 
-let player = PIXI.AnimatedSprite.fromImages(["../../static/games/pixiexample/res/textures/player.png","../../static/games/pixiexample/res/textures/player-lazereyes.png"]);
+let player = PIXI.AnimatedSprite.fromImages(["../../static/games/pixiexample/res/textures/TheRock.png","../../static/games/pixiexample/res/textures/TheRockLaser.png"]);
 player.anchor.set(0.5);
+player.width = 67;
+player.height = 76;
 player.position.x = SCREEN_WIDTH/2;
 player.position.y = SCREEN_HEIGHT - SCREEN_HEIGHT * 0.8;
 GAME.stage.addChild(player);
