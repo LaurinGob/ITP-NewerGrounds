@@ -30,9 +30,11 @@ class Player {
     applyGravity(delta) {
         if (this.position_y < SCREEN_HEIGHT - this.sprite.height) {
             this.velocity_y += 0.1;
+            return false;
         } else {
             // game end
             this.velocity_y = 0;
+            return true;
         }
     }
 
