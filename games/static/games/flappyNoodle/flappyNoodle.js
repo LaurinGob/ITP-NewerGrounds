@@ -7,7 +7,7 @@ var backgroundTexture;
 var backgroundSprite;
 
 //Player vars
-const player = PIXI.Sprite.from('/static/games/flappyNoodle/res/images/Noodle.png');
+const player = PIXI.Sprite.from('/static/games/flappyNoodle/res/images/Player.png');
 let jumpVelocity = 10;
 let velocity = jumpVelocity;
 let spaceHasBeenPressed = false;
@@ -112,7 +112,7 @@ function startGame(){
     player.anchor.set(0.5);
     player.position.x = 200;
     player.position.y = SCREEN_HEIGHT/2;
-    player.scale.set(0.06);
+    player.scale.set(0.2);
     GAME.stage.addChild(player);
 
     // ####################### ui elements
@@ -183,7 +183,7 @@ function updateBackground(){
 // Forks
 var forks = Array()
 async function loadResources(){
-    forkPng = await PIXI.Assets.load('/static/games/flappyNoodle/res/images/Gabel.png');
+    forkPng = await PIXI.Assets.load('/static/games/flappyNoodle/res/images/Fork.png');
     
     //sets 2 sec Intervall -> spawns 1 pair of forks every 2 seconds
     setInterval(() => {
@@ -254,16 +254,16 @@ function getRotation(velocity){
 
 //AABB intersection
 const AABBintersection = function(boxA, boxB) {
-    if (boxA.right < (boxB.left + 25)) {
+    if (boxA.right < (boxB.left + 15)) {
         return false;
     }
-    if (boxA.left > (boxB.right - 25)) {
+    if (boxA.left > (boxB.right - 15)) {
         return false;
     }
-    if (boxA.bottom < (boxB.top + 8)) {
+    if (boxA.bottom < (boxB.top + 15)) {
         return false;
     }
-    if (boxA.top > (boxB.bottom - 8)) {
+    if (boxA.top + 25 > (boxB.bottom - 15)) {
         return false;
     }
     return true;
