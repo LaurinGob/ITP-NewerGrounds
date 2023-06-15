@@ -20,7 +20,8 @@ const GAME = new PIXI.Application(
 );
 
 // adds pixi canvas to selected dom
-document.getElementById("canvasAnchor").appendChild(GAME.view);
+CANVASANCHOR = document.getElementById("canvasAnchor");
+CANVASANCHOR.appendChild(GAME.view);
 
 
 
@@ -46,15 +47,64 @@ PLATFORMS[0] = new Platform(SCREEN_WIDTH/2, SCREEN_HEIGHT-100);
 PLATFORMS[1] = new Platform(SCREEN_WIDTH/3, SCREEN_HEIGHT-200);    
 
 
+/* ~~~~~ Death-Screen + UI and functional elements ~~~~~ */
 
+const reloadPage = function(){
+    window.location.reload();
+}
 
+// set up ui elements and add to uianchor
+const UI_ANCHOR = document.createElement("div"); // the root element of UI
+UI_ANCHOR.setAttribute("id", "uiAnchor");
+UI_ANCHOR.setAttribute("class", "text-center");
+UI_ANCHOR.style.fontFamily = 'Calibri'; // defines font for ui
+UI_ANCHOR.style.fontWeight = 'bolder'; // defines font for ui
+UI_ANCHOR.style.fontSize = '48px';
+UI_ANCHOR.style.backgroundColor = '#ffffff80';
+UI_ANCHOR.style.width = '540px';
+UI_ANCHOR.style.position = 'absolute';
+
+const UI_GAMEOVER = document.createElement("div"); // the root element of UI
+UI_GAMEOVER.setAttribute("id", "uiGameover");
+UI_GAMEOVER.style.display = 'none';
+UI_GAMEOVER.style.width = '540px';
+UI_GAMEOVER.style.height = '100%';
+UI_GAMEOVER.style.position = 'absolute';
+UI_GAMEOVER.style.backgroundColor = '#ddddff';
+
+UI_GAMEOVER_TEXT = document.createElement("div");
+UI_GAMEOVER_TEXT.setAttribute("id", "gameover_div");
+UI_GAMEOVER_TEXT.setAttribute("class", "text-center");
+UI_GAMEOVER_TEXT.style.fontFamily = 'Calibri'; // defines font for ui
+UI_GAMEOVER_TEXT.style.fontWeight = 'bolder'; // defines font for ui
+UI_GAMEOVER_TEXT.style.fontSize = '48px';
+UI_GAMEOVER_TEXT.style.width = '100%';
+UI_GAMEOVER.appendChild(UI_GAMEOVER_TEXT);
+
+UI_RELOAD_BTN = document.createElement("button");
+UI_RELOAD_BTN.setAttribute("id", "reload_btn");
+UI_RELOAD_BTN.setAttribute("class", "btn btn-info");
+UI_RELOAD_BTN.textContent = "RESTART";
+UI_RELOAD_BTN.addEventListener("click", reloadPage);
+UI_RELOAD_BTN.style.width = "300px";
+UI_RELOAD_BTN.style.height = "100px";
+UI_RELOAD_BTN.style.marginLeft = "120px";
+UI_RELOAD_BTN.style.marginRight = "120px";
+UI_RELOAD_BTN.style.marginTop = "120px";
+UI_RELOAD_BTN.style.fontSize = "40px";
+UI_GAMEOVER.appendChild(UI_RELOAD_BTN);
+
+CANVASANCHOR.appendChild(UI_ANCHOR);
+CANVASANCHOR.appendChild(UI_GAMEOVER);
+
+/* ~~~~~ Game Content ~~~~~ */
 
 loadRessources();
 
 /* ~~~~~ Loop ~~~~~ */
 function gameLoop(delta) {
-
-    PLAYER.applyGravity(delta);
+    UI_ANCHOR.innerHTML = 'Score: ' + Math.floor(SCORE/10);
+    GameOver = PLAYER.applyGravity(delta);
     PLAYER.applyVelocity_x(delta);
     PLAYER.mapWrap();
     PLAYER.updateSprite();
@@ -101,6 +151,15 @@ function gameLoop(delta) {
             console.log(PLATFORMS[i]);
         }
     } 
+
+    //deathscreen condition
+    if(GameOver){
+        /*
+        stop game loop?
+        */
+        UI_GAMEOVER.style.display = 'block';
+        UI_GAMEOVER_TEXT.innerHTML = 'GAME OVER<br>Score: ' + Math.floor(SCORE/10);
+    }
 
     //Gameplay
     controlPlayer();
