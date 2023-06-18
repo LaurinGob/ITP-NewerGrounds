@@ -141,7 +141,6 @@ function gameLoop(delta) {
             PLAYER.velocity_y = JUMP_VELOCITY;
             PLAYER.isSquished = true;
             PLAYER.rotationLocked = false;
-            PLAYER.sprite.angle = 0;
             setTimeout(() => {
                 PLAYER.isSquished = false;
             }, 150);
