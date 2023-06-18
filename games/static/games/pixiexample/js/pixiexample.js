@@ -70,8 +70,9 @@ groundbreak.animationSpeed = 0.2;
 groundbreak.visible = false;
 groundbreak.loop = false;
 
+//Game design variables
 let enemyArray = [];
-let numberOfStones = 20;
+let numberOfStones = 10;
 let speed = 15;
 let playerFallingSpeed = 6;
 let ramenFallingSpeed = 2;
@@ -174,6 +175,7 @@ function gameLoop(delta) {
         if (AABBintersection(enemyArray[i].getBounds(), player.getBounds())) {
             if (player_jumping || enemyArray[i].getBounds().bottom > player.getBounds().bottom - 30) {
                 // eat
+                const emitter = createRamenEmitter(enemyArray[i], i);
                 enemyArray[i].position.x = getRandomInt(SCREEN_WIDTH);
                 enemyArray[i].position.y = 0;
                 //tempnumber = 1 + Math.random();
@@ -203,6 +205,74 @@ function gameLoop(delta) {
 
     checkGameOver();
 }
+
+
+
+const createRamenEmitter = function(enemyRamen, ramenIndex){
+    //Particle Library setup
+    const { Container, ParticleContainer, Texture, Ticker } = PIXI;
+    const cnt = new ParticleContainer();
+    GAME.stage.addChild(cnt);           //add emitter to GAME.stage
+
+    let enemyTexture = enemyTexture3;
+    if(ramenIndex % 3 === 0){
+        enemyTexture = enemyTexture1;
+        console.log("2");
+    }
+    else if(ramenIndex % 3 === 1){
+        console.log("3");
+        enemyTexture = enemyTexture2;
+    }
+
+
+    //create emitter
+    const emitter = new PIXI.particles.Emitter(cnt, {
+        lifetime: { min: 0.1, max: 3 },
+        frequency: 0.1,           //time in seconds between particles
+        spawnChance: 1,         //0-1 chance of spawning a particle each spawn event
+        particlesPerWave: 5,    //Optional
+        emitterLifetime: 0.5,   //Seconds until emitter stops
+        maxParticles: 30,       //Optional max simultaneous particles
+        pos: { x: enemyRamen.position.x, y: enemyRamen.position.y },
+        autoUpdate: true,       //ties the emitter to the PixiJS ticker
+        behaviors: [
+            {
+                type: 'spawnShape',
+                config: {
+                    type: 'rect',
+                    data: { x: -60, y: 0, w: 120, h: 70}
+                },
+            },
+            {
+                type: 'textureSingle', config: { texture: enemyTexture }
+            },
+            {
+                type: 'scale',
+                config: {
+                    scale: {
+                        list: [{value: 0.01, time: 0}, {value: 0.001, time: 1}]
+                    }
+                }
+            },
+            {
+                type: 'moveAcceleration',
+                config: {
+                    accel: {
+                        x:0,
+                        y:200
+                    },
+                    minStart: 10,
+                    maxStart: 20,
+                    rotate: true
+                }
+            }
+        ],
+    });
+
+    return emitter;
+}
+
+// Particles configuration End -------------------------------------------------------------------
 
 // #################### helper functions
 const AABBintersection = function(boxA, boxB) {
