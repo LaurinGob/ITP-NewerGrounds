@@ -57,7 +57,6 @@ GAME.stage.addChild(backgroundSprite);
 // set up ui elements and add to uianchor
 const STARTSCREEN_ANCHOR = document.createElement("div"); // the root element of UI
 STARTSCREEN_ANCHOR.setAttribute("id", "uiAnchor");
-STARTSCREEN_ANCHOR.style.fontFamily = 'Calibri'; // defines font for ui
 STARTSCREEN_ANCHOR.style.fontWeight = 'bolder'; // defines font for ui
 
 //Start Screen
@@ -66,15 +65,15 @@ STARTSCREEN_ELEMENT.position = 'absolute';
 
 const TITLE_ELEMENT = document.createElement("div");
 TITLE_ELEMENT.setAttribute("id", "title");
-TITLE_ELEMENT.setAttribute("style", "position: absolute; top: 100px; left: 13px; font-family: Calibri; font-weight: bolder; color: rgb(233, 200, 20)");
+TITLE_ELEMENT.setAttribute("style", "position: absolute; top: 100px; left: 13px; font-weight: bolder; color: rgb(233, 200, 20)");
 const TITLE_H1 = document.createElement("h1");
 TITLE_H1.innerText = 'Flappy Noodles';
-TITLE_H1.setAttribute("style", "font-size: 150px");
+TITLE_H1.setAttribute("style", "font-size: 120px");
 TITLE_ELEMENT.appendChild(TITLE_H1);
 
 const STARTBUTTON_ELEMENT =  document.createElement("div");
 STARTBUTTON_ELEMENT.setAttribute("id", "startButton");
-STARTBUTTON_ELEMENT.setAttribute("style", "position: absolute; top: 270px; left: 360px; font-family: Calibri; font-weight: bolder; color: rgb(233, 167, 25)");
+STARTBUTTON_ELEMENT.setAttribute("style", "position: absolute; top: 270px; left: 360px; font-weight: bolder; color: rgb(233, 167, 25)");
 STARTBUTTON_ELEMENT.addEventListener("click", startGame);
 STARTBUTTON_ELEMENT.addEventListener("mouseover", function() {
     STARTBUTTON_ELEMENT.style.textShadow = "0 0 10px black";
@@ -120,7 +119,6 @@ function startGame(){
     // set up ui elements and add to uianchor
     const UIANCHOR = document.createElement("div"); // the root element of UI
     UIANCHOR.setAttribute("id", "uiAnchor");
-    UIANCHOR.style.fontFamily = 'Calibri'; // defines font for ui
     UIANCHOR.style.fontWeight = 'bolder'; // defines font for ui
 
     // positioning
@@ -141,7 +139,7 @@ function startGame(){
     //Game Over tag
     const GAMEOVER_DIV = document.createElement("div");
     GAMEOVER_DIV.setAttribute("id", "gameOver");
-    GAMEOVER_DIV.setAttribute("style", "position: absolute; top: 100px; left: 30px; font-family: Calibri; font-weight: bolder; color: red; display: none;");
+    GAMEOVER_DIV.setAttribute("style", "position: absolute; top: 100px; left: 30px; font-weight: bolder; color: red; display: none;");
     const GAMEOVER_H1 = document.createElement("h1"); 
     GAMEOVER_H1.setAttribute("style", "font-size: 180px")
     GAMEOVER_H1.innerText = 'GAME OVER';
@@ -151,7 +149,7 @@ function startGame(){
     //Restart tag
     const RESTART_DIV = document.createElement("div");
     RESTART_DIV.setAttribute("id", "restart");
-    RESTART_DIV.setAttribute("style", "position: absolute; top: 300px; left: 240px;font-family: Calibri; font-weight: bolder; color: white; display: none;");
+    RESTART_DIV.setAttribute("style", "position: absolute; top: 300px; left: 240px; font-weight: bolder; color: white; display: none;");
     const RESTART_H1 = document.createElement("h1"); 
     RESTART_H1.innerText = 'Press "r" to restart the game';
     RESTART_DIV.appendChild(RESTART_H1);

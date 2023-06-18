@@ -1,16 +1,15 @@
 /*~~~~~~~~~~~~~~~~~ body ~~~~~~~~~~~~~~~~~*/
 body{
     background-color: wheat !important;
+    font-family: 'Delius' !important;
 }
 
 .row li{
     background-color: wheat !important;
 }
 
-/*~~~~~~~~~~~~~~~~~ game canvas ~~~~~~~~~~~~~~~~~*/
-
-canvas{
-    border: black dashed
+h1{
+    font-weight: bolder !important;
 }
 
 /*~~~~~~~~~~~~~~~~~ navbar + navbar dropdown ~~~~~~~~~~~~~~~~~*/
@@ -54,10 +53,16 @@ nav{
 }
 
 /*~~~~~~~~~~~~~~~~~ index page game containers ~~~~~~~~~~~~~~~~~*/
+
+.thumbnail{
+    width: 100px;
+    height: 100px;
+}
+
 #gameDisplayBox .container{
     /*general*/
-    min-height: 180px;
-    min-width: 180px;
+    min-height: 240px;
+    min-width: 240px;
 
     /*background*/
     background-image: url('../resources/plate.png');

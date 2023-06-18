@@ -60,7 +60,6 @@ const reloadPage = function(){
 const UI_ANCHOR = document.createElement("div"); // the root element of UI
 UI_ANCHOR.setAttribute("id", "uiAnchor");
 UI_ANCHOR.setAttribute("class", "text-center");
-UI_ANCHOR.style.fontFamily = 'Calibri'; // defines font for ui
 UI_ANCHOR.style.fontWeight = 'bolder'; // defines font for ui
 UI_ANCHOR.style.fontSize = '48px';
 UI_ANCHOR.style.backgroundColor = '#ffffff80';
@@ -78,7 +77,6 @@ UI_GAMEOVER.style.backgroundColor = '#ddddff';
 const UI_GAMEOVER_TEXT = document.createElement("div");
 UI_GAMEOVER_TEXT.setAttribute("id", "gameover_div");
 UI_GAMEOVER_TEXT.setAttribute("class", "text-center");
-UI_GAMEOVER_TEXT.style.fontFamily = 'Calibri'; // defines font for ui
 UI_GAMEOVER_TEXT.style.fontWeight = 'bolder'; // defines font for ui
 UI_GAMEOVER_TEXT.style.fontSize = '48px';
 UI_GAMEOVER_TEXT.style.width = '100%';
