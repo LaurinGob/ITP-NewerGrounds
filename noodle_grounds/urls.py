@@ -22,6 +22,7 @@ from games.views import sampleGame  # Hier die Minispiel View von /games/views.p
 from games.views import pixiexample
 from games.views import playerexample
 from games.views import noodleJump
+from games.views import flappyNoodle
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -38,6 +39,7 @@ urlpatterns = [
     path('pixiexample', pixiexample, name="pixiexample"),
     path('playerexample', playerexample, name="playerexample"),
     path('noodleJump', noodleJump, name="noodleJump"),
+    path('flappyNoodle', flappyNoodle, name="flappyNoodle"),
 
     # API
     path('api/', include('api.urls')),
