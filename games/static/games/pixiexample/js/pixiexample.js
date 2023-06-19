@@ -177,7 +177,7 @@ function gameLoop(delta) {
         // set groundbreak at impact
         if (prepare_impact) {
             //groundbreak Particles
-            createRockEmitter(player);
+            const emitter = createRockEmitter(player);
             groundbreak.position.x = player.position.x;
             groundbreak.position.y = SCREEN_HEIGHT - floor.height / 2;
             groundbreak.gotoAndStop(0);
@@ -258,10 +258,8 @@ const createRamenEmitter = function(enemyRamen, ramenIndex){
     let enemyTexture = enemyTexture3;
     if(ramenIndex % 3 === 0){
         enemyTexture = enemyTexture1;
-        console.log("2");
     }
     else if(ramenIndex % 3 === 1){
-        console.log("3");
         enemyTexture = enemyTexture2;
     }
 
@@ -321,13 +319,13 @@ const createRockEmitter = function(player){
 
     //create emitter
     const emitter = new PIXI.particles.Emitter(cnt, {
-        lifetime: { min: 0.1, max: 1 },
+        lifetime: { min: 0.1, max: 0.5 },
         frequency: 1,           //time in seconds between particles
         spawnChance: 1,         //0-1 chance of spawning a particle each spawn event
         particlesPerWave: 10,    //Optional
-        emitterLifetime: 1,   //Seconds until emitter stops
+        emitterLifetime: 1.1,   //Seconds until emitter stops
         maxParticles: 10,       //Optional max simultaneous particles
-        pos: { x: player.position.x, y: player.position.y },
+        pos: { x: player.position.x, y: player.position.y},
         autoUpdate: true,       //ties the emitter to the PixiJS ticker
         behaviors: [
             {
@@ -338,13 +336,13 @@ const createRockEmitter = function(player){
                 },
             },
             {
-                type: 'textureSingle', config: { texture: enemyTexture }
+                type: 'textureSingle', config: { texture: PIXI.Texture.from("../../static/games/pixiexample/res/textures/floor_particle.jpg") }
             },
             {
                 type: 'scale',
                 config: {
                     scale: {
-                        list: [{value: 0.01, time: 0}, {value: 0.001, time: 1}]
+                        list: [{value: 0.4, time: 0}, {value: 0.20, time: 1}]
                     }
                 }
             },
