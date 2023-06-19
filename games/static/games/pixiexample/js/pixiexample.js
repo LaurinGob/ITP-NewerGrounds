@@ -15,13 +15,50 @@ const GAME = new PIXI.Application(
 );
 
 // adds pixi canvas to selected dom
-document.getElementById("canvasAnchor").appendChild(GAME.view);
+CANVASANCHOR = document.getElementById("canvasAnchor");
+CANVASANCHOR.appendChild(GAME.view);
 
 // #################### UI setup
+
+const reloadPage = function(){
+    window.location.reload();
+}
+
 const uiRockCounter = document.getElementById("uiRockCounter");
 const uiHealth = document.getElementById("uiHealth");
 const uiChain = document.getElementById("uiChain");
 const uiComboMultiplier = document.getElementById("uiComboMultiplier");
+
+const UI_GAMEOVER = document.createElement("div"); // the root element of UI
+UI_GAMEOVER.setAttribute("id", "uiGameover");
+UI_GAMEOVER.style.display = 'none';
+UI_GAMEOVER.style.width = '960px';
+UI_GAMEOVER.style.height = '100%';
+UI_GAMEOVER.style.position = 'absolute';
+UI_GAMEOVER.style.backgroundColor = '#ddddff';
+
+const UI_GAMEOVER_TEXT = document.createElement("div");
+UI_GAMEOVER_TEXT.setAttribute("id", "gameover_div");
+UI_GAMEOVER_TEXT.setAttribute("class", "text-center");
+UI_GAMEOVER_TEXT.style.fontWeight = 'bolder'; // defines font for ui
+UI_GAMEOVER_TEXT.style.fontSize = '48px';
+UI_GAMEOVER_TEXT.style.width = '100%';
+UI_GAMEOVER.appendChild(UI_GAMEOVER_TEXT);
+
+const UI_RELOAD_BTN = document.createElement("button");
+UI_RELOAD_BTN.setAttribute("id", "reload_btn");
+UI_RELOAD_BTN.setAttribute("class", "btn btn-info");
+UI_RELOAD_BTN.textContent = "RESTART";
+UI_RELOAD_BTN.addEventListener("click", reloadPage);
+UI_RELOAD_BTN.style.width = "300px";
+UI_RELOAD_BTN.style.height = "100px";
+UI_RELOAD_BTN.style.marginLeft = "330px";
+UI_RELOAD_BTN.style.marginRight = "330px";
+UI_RELOAD_BTN.style.marginTop = "220px";
+UI_RELOAD_BTN.style.fontSize = "40px";
+UI_GAMEOVER.appendChild(UI_RELOAD_BTN);
+
+CANVASANCHOR.appendChild(UI_GAMEOVER);
 
 var updateUi = function() {
     uiRockCounter.innerText = rockCounter;
@@ -119,6 +156,8 @@ let prepare_impact = true;
 function checkGameOver(){
     if(health <= 0){
         GAME.ticker.stop();
+        UI_GAMEOVER.style.display = 'block';
+        UI_GAMEOVER_TEXT.innerHTML = 'GAME OVER<br>Score: ' + Math.floor(SCORE/10);
     }
 }
 
@@ -137,6 +176,8 @@ function gameLoop(delta) {
         player_airborne = false;
         // set groundbreak at impact
         if (prepare_impact) {
+            //groundbreak Particles
+            const emitter = createRockEmitter(player);
             groundbreak.position.x = player.position.x;
             groundbreak.position.y = SCREEN_HEIGHT - floor.height / 2;
             groundbreak.gotoAndStop(0);
@@ -217,17 +258,15 @@ const createRamenEmitter = function(enemyRamen, ramenIndex){
     let enemyTexture = enemyTexture3;
     if(ramenIndex % 3 === 0){
         enemyTexture = enemyTexture1;
-        console.log("2");
     }
     else if(ramenIndex % 3 === 1){
-        console.log("3");
         enemyTexture = enemyTexture2;
     }
 
 
     //create emitter
     const emitter = new PIXI.particles.Emitter(cnt, {
-        lifetime: { min: 0.1, max: 3 },
+        lifetime: { min: 0.1, max: 2 },
         frequency: 0.1,           //time in seconds between particles
         spawnChance: 1,         //0-1 chance of spawning a particle each spawn event
         particlesPerWave: 5,    //Optional
@@ -251,6 +290,59 @@ const createRamenEmitter = function(enemyRamen, ramenIndex){
                 config: {
                     scale: {
                         list: [{value: 0.01, time: 0}, {value: 0.001, time: 1}]
+                    }
+                }
+            },
+            {
+                type: 'moveAcceleration',
+                config: {
+                    accel: {
+                        x:0,
+                        y:200
+                    },
+                    minStart: 10,
+                    maxStart: 20,
+                    rotate: true
+                }
+            }
+        ],
+    });
+
+    return emitter;
+}
+
+const createRockEmitter = function(player){
+    //Particle Library setup
+    const { Container, ParticleContainer, Texture, Ticker } = PIXI;
+    const cnt = new ParticleContainer();
+    GAME.stage.addChild(cnt);           //add emitter to GAME.stage
+
+    //create emitter
+    const emitter = new PIXI.particles.Emitter(cnt, {
+        lifetime: { min: 0.1, max: 0.5 },
+        frequency: 1,           //time in seconds between particles
+        spawnChance: 1,         //0-1 chance of spawning a particle each spawn event
+        particlesPerWave: 10,    //Optional
+        emitterLifetime: 1.1,   //Seconds until emitter stops
+        maxParticles: 10,       //Optional max simultaneous particles
+        pos: { x: player.position.x, y: player.position.y},
+        autoUpdate: true,       //ties the emitter to the PixiJS ticker
+        behaviors: [
+            {
+                type: 'spawnShape',
+                config: {
+                    type: 'rect',
+                    data: { x: -60, y: 0, w: 120, h: 70}
+                },
+            },
+            {
+                type: 'textureSingle', config: { texture: PIXI.Texture.from("../../static/games/pixiexample/res/textures/floor_particle.jpg") }
+            },
+            {
+                type: 'scale',
+                config: {
+                    scale: {
+                        list: [{value: 0.4, time: 0}, {value: 0.20, time: 1}]
                     }
                 }
             },
