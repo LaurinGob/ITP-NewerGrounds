@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "@pixi/particle-emitter": "^5.0.8"
+  }
+}
