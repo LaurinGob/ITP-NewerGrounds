@@ -15,13 +15,50 @@ const GAME = new PIXI.Application(
 );
 
 // adds pixi canvas to selected dom
-document.getElementById("canvasAnchor").appendChild(GAME.view);
+CANVASANCHOR = document.getElementById("canvasAnchor");
+CANVASANCHOR.appendChild(GAME.view);
 
 // #################### UI setup
+
+const reloadPage = function(){
+    window.location.reload();
+}
+
 const uiRockCounter = document.getElementById("uiRockCounter");
 const uiHealth = document.getElementById("uiHealth");
 const uiChain = document.getElementById("uiChain");
 const uiComboMultiplier = document.getElementById("uiComboMultiplier");
+
+const UI_GAMEOVER = document.createElement("div"); // the root element of UI
+UI_GAMEOVER.setAttribute("id", "uiGameover");
+UI_GAMEOVER.style.display = 'none';
+UI_GAMEOVER.style.width = '960px';
+UI_GAMEOVER.style.height = '100%';
+UI_GAMEOVER.style.position = 'absolute';
+UI_GAMEOVER.style.backgroundColor = '#ddddff';
+
+const UI_GAMEOVER_TEXT = document.createElement("div");
+UI_GAMEOVER_TEXT.setAttribute("id", "gameover_div");
+UI_GAMEOVER_TEXT.setAttribute("class", "text-center");
+UI_GAMEOVER_TEXT.style.fontWeight = 'bolder'; // defines font for ui
+UI_GAMEOVER_TEXT.style.fontSize = '48px';
+UI_GAMEOVER_TEXT.style.width = '100%';
+UI_GAMEOVER.appendChild(UI_GAMEOVER_TEXT);
+
+const UI_RELOAD_BTN = document.createElement("button");
+UI_RELOAD_BTN.setAttribute("id", "reload_btn");
+UI_RELOAD_BTN.setAttribute("class", "btn btn-info");
+UI_RELOAD_BTN.textContent = "RESTART";
+UI_RELOAD_BTN.addEventListener("click", reloadPage);
+UI_RELOAD_BTN.style.width = "300px";
+UI_RELOAD_BTN.style.height = "100px";
+UI_RELOAD_BTN.style.marginLeft = "330px";
+UI_RELOAD_BTN.style.marginRight = "330px";
+UI_RELOAD_BTN.style.marginTop = "220px";
+UI_RELOAD_BTN.style.fontSize = "40px";
+UI_GAMEOVER.appendChild(UI_RELOAD_BTN);
+
+CANVASANCHOR.appendChild(UI_GAMEOVER);
 
 var updateUi = function() {
     uiRockCounter.innerText = rockCounter;
@@ -119,6 +156,8 @@ let prepare_impact = true;
 function checkGameOver(){
     if(health <= 0){
         GAME.ticker.stop();
+        UI_GAMEOVER.style.display = 'block';
+        UI_GAMEOVER_TEXT.innerHTML = 'GAME OVER<br>Score: ' + Math.floor(SCORE/10);
     }
 }
 
