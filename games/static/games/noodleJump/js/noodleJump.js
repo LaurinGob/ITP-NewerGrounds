@@ -10,6 +10,24 @@ let SCORE = 0;
 
 let TAN_INPUT = 0;
 
+//include Sound
+const jumpAudio = new Audio('../../static/games/noodleJump/res/Sound/NoodleJump_JumpingSound.mp3');
+jumpAudio.loop = false;
+jumpAudio.volume = 0.5;
+
+const backgroundMusic = new Audio('../../static/games/noodleJump/res/Sound/NoodleJump.mp3');
+backgroundMusic.loop = true;
+backgroundMusic.volume = 0.6;
+
+const gameOverSound = new Audio('../../static/games/noodleJump/res/Sound/gameOver.mp3');
+gameOverSound.loop = false;
+gameOverSound.volume = 1;
+
+//play audio
+function playJumpingAudio() { 
+    jumpAudio.play(); 
+} 
+
 // creates new pixi object
 const GAME = new PIXI.Application(
     {
@@ -99,7 +117,6 @@ CANVASANCHOR.appendChild(UI_ANCHOR);
 CANVASANCHOR.appendChild(UI_GAMEOVER);
 
 /* ~~~~~ Game Content ~~~~~ */
-
 loadRessources();
 
 /* ~~~~~ Loop ~~~~~ */
@@ -141,6 +158,7 @@ function gameLoop(delta) {
             PLAYER.velocity_y = JUMP_VELOCITY;
             PLAYER.isSquished = true;
             PLAYER.rotationLocked = false;
+            playJumpingAudio();
             setTimeout(() => {
                 PLAYER.isSquished = false;
             }, 150);
@@ -177,8 +195,11 @@ function gameLoop(delta) {
         /*
         stop game loop?
         */
+        backgroundMusic.pause();
+        gameOverSound.play();
         UI_GAMEOVER.style.display = 'block';
         UI_GAMEOVER_TEXT.innerHTML = 'GAME OVER<br>Score: ' + Math.floor(SCORE/10);
+        GAME.ticker.stop();
     }
 
     //Gameplay
@@ -193,7 +214,6 @@ function gameLoop(delta) {
 
 async function loadRessources() {
     background_texture = await PIXI.Assets.load('../../static/games/noodleJump/res/textures/background.jpg');
-
     /*
     platform_texture = await PIXI.Assets.load('../../static/games/noodleJump/res/textures/penne_platform.png');
     player_texture = await PIXI.Assets.load('../../static/games/noodleJump/res/textures/meatball_player.png');
@@ -201,6 +221,10 @@ async function loadRessources() {
 
     createSprites();
 }
+
+document.addEventListener("keydown", function() {
+    backgroundMusic.play();
+});
 
 function createSprites() {
     //Background Sprite setup
@@ -236,7 +260,6 @@ function setup(){
     // adds the gameloop function to ticker (pixi.js)
     GAME.ticker.add(gameLoop);
     GAME.ticker.maxFPS = MAX_FPS;
-
 }
 
 
@@ -259,7 +282,7 @@ const AABBintersection = function(boxA, boxB) {
 
 const playerJump = function(player, platform){
     if(AABBintersection(player, platform) && (player.y + player.height < platform.y + platform.height/2)){
-        return true;
+        return true; 
     }
     else{
         return false;
