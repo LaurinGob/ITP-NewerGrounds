@@ -14,6 +14,20 @@ const GAME = new PIXI.Application(
     }
 );
 
+//Import Sound
+const backgroundMusic = new Audio('../../static/games/pixiexample/res/sound/RockinRamen.mp3');
+backgroundMusic.loop = true;
+backgroundMusic.volume = 0.5;
+
+document.addEventListener("keydown", function() {
+    backgroundMusic.play();
+});
+
+const landingAudio = new Audio('../../static/games/pixiexample/res/sound/RockinRamen_Landing.mp3');
+landingAudio.loop = false;
+landingAudio.volume = 0.5;
+
+
 // adds pixi canvas to selected dom
 CANVASANCHOR = document.getElementById("canvasAnchor");
 CANVASANCHOR.appendChild(GAME.view);
@@ -183,6 +197,7 @@ function gameLoop(delta) {
             groundbreak.gotoAndStop(0);
             groundbreak.play();
             groundbreak.visible = true;
+            landingAudio.play();
             setTimeout(function() {groundbreak.visible = false;}, 700);
             prepare_impact = false;
             setTimeout(function() {jump_release = true;player.gotoAndStop(1);}, 400);
