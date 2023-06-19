@@ -137,6 +137,8 @@ function gameLoop(delta) {
         player_airborne = false;
         // set groundbreak at impact
         if (prepare_impact) {
+            //groundbreak Particles
+            createRockEmitter(player);
             groundbreak.position.x = player.position.x;
             groundbreak.position.y = SCREEN_HEIGHT - floor.height / 2;
             groundbreak.gotoAndStop(0);
@@ -227,13 +229,66 @@ const createRamenEmitter = function(enemyRamen, ramenIndex){
 
     //create emitter
     const emitter = new PIXI.particles.Emitter(cnt, {
-        lifetime: { min: 0.1, max: 3 },
+        lifetime: { min: 0.1, max: 2 },
         frequency: 0.1,           //time in seconds between particles
         spawnChance: 1,         //0-1 chance of spawning a particle each spawn event
         particlesPerWave: 5,    //Optional
         emitterLifetime: 0.5,   //Seconds until emitter stops
         maxParticles: 30,       //Optional max simultaneous particles
         pos: { x: enemyRamen.position.x, y: enemyRamen.position.y },
+        autoUpdate: true,       //ties the emitter to the PixiJS ticker
+        behaviors: [
+            {
+                type: 'spawnShape',
+                config: {
+                    type: 'rect',
+                    data: { x: -60, y: 0, w: 120, h: 70}
+                },
+            },
+            {
+                type: 'textureSingle', config: { texture: enemyTexture }
+            },
+            {
+                type: 'scale',
+                config: {
+                    scale: {
+                        list: [{value: 0.01, time: 0}, {value: 0.001, time: 1}]
+                    }
+                }
+            },
+            {
+                type: 'moveAcceleration',
+                config: {
+                    accel: {
+                        x:0,
+                        y:200
+                    },
+                    minStart: 10,
+                    maxStart: 20,
+                    rotate: true
+                }
+            }
+        ],
+    });
+
+    return emitter;
+}
+
+const createRockEmitter = function(player){
+    //Particle Library setup
+    const { Container, ParticleContainer, Texture, Ticker } = PIXI;
+    const cnt = new ParticleContainer();
+    GAME.stage.addChild(cnt);           //add emitter to GAME.stage
+
+    //create emitter
+    const emitter = new PIXI.particles.Emitter(cnt, {
+        lifetime: { min: 0.1, max: 1 },
+        frequency: 1,           //time in seconds between particles
+        spawnChance: 1,         //0-1 chance of spawning a particle each spawn event
+        particlesPerWave: 10,    //Optional
+        emitterLifetime: 1,   //Seconds until emitter stops
+        maxParticles: 10,       //Optional max simultaneous particles
+        pos: { x: player.position.x, y: player.position.y },
         autoUpdate: true,       //ties the emitter to the PixiJS ticker
         behaviors: [
             {
