@@ -305,6 +305,63 @@ document.addEventListener('keydown', function(event) {
     }
   });
 
+
+//Create the wind particles on flapping
+const createJumpParticles = function (player){
+
+//Particle Library setup
+const { Container, ParticleContainer, Texture, Ticker } = PIXI;
+const cnt = new ParticleContainer();
+GAME.stage.addChild(cnt);           //add emitter to GAME.stage
+
+//create emitter
+const emitter = new PIXI.particles.Emitter(cnt, {
+    lifetime: { min: 0.1, max: 0.5 },
+    frequency: 1,           //time in seconds between particles
+    spawnChance: 1,         //0-1 chance of spawning a particle each spawn event
+    particlesPerWave: 5,    //Optional
+    emitterLifetime: 1.1,   //Seconds until emitter stops
+    maxParticles: 10,       //Optional max simultaneous particles
+    pos: { x: player.position.x, y: player.position.y},
+    autoUpdate: true,       //ties the emitter to the PixiJS ticker
+    behaviors: [
+        {
+            type: 'spawnShape',
+            config: {
+                type: 'rect',
+                data: { x: -60, y: 0, w: 120, h: 70}
+            },
+        },
+        {
+            type: 'textureSingle', config: { texture: PIXI.Texture.from("../../static/games/flappyNoodle/res/images/cloud.png") }
+        },
+        {
+            type: 'scale',
+            config: {
+                scale: {
+                    list: [{value: 0.1, time: 0}, {value: 0.05, time: 1}]
+                }
+            }
+        },
+        {
+            type: 'moveAcceleration',
+            config: {
+                accel: {
+                    x:-500,
+                    y:300
+                },
+                minStart: -20,
+                maxStart: -100,
+                rotate: false
+            }
+        },
+    ]
+});
+
+return emitter;
+
+}
+
 // Game loop
 function gameLoop(delta) {
 
@@ -319,7 +376,7 @@ function gameLoop(delta) {
         if(keys[' '] && !spaceHasBeenPressed){
             velocity = jumpVelocity;
             playJumpingAudio();
-
+            const emitter = createJumpParticles(player);
             spaceHasBeenPressed = true;
         }
 
