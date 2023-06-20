@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse, Http404, HttpRequest
 from django.contrib.auth import authenticate, login, logout
 
@@ -14,11 +14,18 @@ def index(request: HttpRequest):
 def contact(request: HttpRequest):
     return render(request, 'core/contact.html')
 
-def profile(request: HttpRequest):
+def self_profile(request: HttpRequest):
     if request.user.is_authenticated:
-        return render(request, 'core/profile.html')
+        return redirect(f'profile/{request.user.username}')
     else:
-        return render(request, 'core/login.html', {'form': LoginForm})
+        return redirect('login/', permanent=True)
+
+def profile(request: HttpRequest, username: str):
+    try:
+        user = User.objects.get(username=username)
+        return render(request, 'core/profile.html', {'user': user})
+    except User.DoesNotExist:
+        return render(request, 'core/profile_404.html')
 
 def vw_login(request: HttpRequest):
     form = LoginForm
@@ -51,9 +58,10 @@ def vw_login(request: HttpRequest):
 
 
 def vw_register(request: HttpRequest):
-    # If user is requesting site
-    if request.method == "GET":
-        form = RegisterForm
+    form = RegisterForm
+
+    if request.user.is_authenticated:
+        messages.error(request, "Sie sind bereits eingeloggt")
 
     # If user has submitted the form
     if request.method == "POST":
