@@ -13,6 +13,15 @@ h1{
 }
 
 /*~~~~~~~~~~~~~~~~~ navbar + navbar dropdown ~~~~~~~~~~~~~~~~~*/
+a.logo{
+    text-decoration: inherit; 
+    color: inherit; 
+    display: inherit;
+}
+a.logo:hover{
+    color: inherit;
+}
+
 nav{
     background-color: #990000;
     color: white;
