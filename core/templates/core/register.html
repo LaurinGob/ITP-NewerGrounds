@@ -1,63 +1,50 @@
 {% extends 'core/base.html' %} {% load static %} {% block content %}
+<div class="container col-9" id="site-content">
 
-<div class="container col-9 text-center" id="site-content">
-  <!--Site-content-->
-  <h1>Registration</h1>
+  <h1 class="text-center">Registration</h1>
+  
   <form method="POST" action="{% url 'register' %}">
+    {% csrf_token %}
     <div class="d-flex justify-content-center mt-5">
       <div class="input group w-50">
-        <p class="fw-bold">Username</p>
-        <input
-          type="text"
-          id="username"
-          class="form-control"
-          placeholder="Username"
-          aria-label="Username"
-        />
+        <p class="text-center fw-bold">Username</p>
+        {{form.username}}
       </div>
     </div>
-
+    
     <div class="d-flex justify-content-center mt-3">
       <div class="input group w-50">
-        <p class="fw-bold">E-Mail</p>
-        <input
-          type="email"
-          id="email"
-          class="form-control"
-          placeholder="max.muster@gmail.at"
-          aria-label="EMail"
-        />
+        <p class="text-center fw-bold">E-Mail</p>
+        {{form.email}}
       </div>
     </div>
-
+    
     <div class="d-flex justify-content-center mt-3">
       <div class="input group w-50">
-        <p class="fw-bold">Password</p>
-        <input
-          type="password"
-          id="password"
-          class="form-control"
-          placeholder="Password"
-          aria-label="Password"
-        />
+        <p class="text-center fw-bold">Password</p>
+        {{form.password}}
       </div>
     </div>
-
+    
     <div class="d-flex justify-content-center mt-3">
       <div class="input group w-50">
-        <p class="fw-bold">Confirm Password</p>
-        <input
-          type="password"
-          id="password2"
-          class="form-control"
-          placeholder="Confirm Password"
-          aria-label="Confirm Password"
-        />
+        <p class="text-center fw-bold">Confirm Password</p>
+        {{form.password2}}
       </div>
     </div>
-
+    
+    {% if messages %}
+    <div class="d-flex justify-content-center mt-3">
+      <ul class="w-50" style="list-style-type: none;">
+          {% for message in messages %}
+          <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+          {% endfor %}
+      </ul>
+    </div>
+    {% endif %}
+    
     <div class="d-flex justify-content-center mt-4">
-      <button type="button" id="confirm" class="btn btn-info">Register</button>
+      <button class="btn btn-info" type="submit">Register</button>
     </div>
   </form>
 </div>

@@ -38,22 +38,18 @@ def vw_login(request: HttpRequest):
 
             if user is not None:
                 login(request, user)
-                context['message'] = "Login erfolgreich"
+                messages.success(request, "Login erfolgreich")
             else:
-                context['message'] = "E-Mail oder Passwort falsch"
+                messages.succes(request, "E-Mail oder Passwort falsch")
         
         else:
-            context['message'] = "Login fehlgeschlagen"
-            context['errors'] = str(form.errors)
+            messages.error(request, str(form.errors))
     
     context = {'form': form}  # make a variable by the name of 'form' available to the login.html template; the LoginForm will be its value
     return render(request, 'core/login.html', context)
 
 
 def vw_register(request: HttpRequest):
-    has_error_messages = False
-    has_success_messages = False
-
     # If user is requesting site
     if request.method == "GET":
         form = RegisterForm
@@ -85,35 +81,25 @@ def vw_register(request: HttpRequest):
                 pass
             
             
-            
-            if messages.get_messages(request):
-                # if error messages:
-                has_error_messages = True
-            else:  
-                # if no errors, save user to DB:
+            # If no errors, register
+            if not messages.get_messages(request):
                 try:
                     user = User(username=username, email=email)
                     user.set_password(pw1)
                     user.save()
 
                     messages.success(request, f"Erfolgreich registriert als {user.username}")
-                    has_success_messages = True
 
                 except Exception as database_error:  # Just in case user.save() throws errors; i.e. if the DB server is down
                     messages.error(request, str(database_error))
-                    has_error_messages = True
 
-        else:
-            # Print issues if form was filled out incorrectly 
-            # typically triggered when front-end checks (i.e. max_length HTML attribute) are bypassed by user
-            has_error_messages = True
+
+        else:  # If form was filled out invalidly (i.e. max_length of username was exceeded)
             for field in form.errors:
                 for error in form.errors[field]:
                     messages.error(request, f"{field}: {str(error)}")  # produces "username: maximum length is 20 characters" error message
 
 
-    context = {'form': form,
-               'has_error_messages': has_error_messages,
-               'has_success_messages': has_success_messages}
+    context = {'form': form}
 
     return render(request, 'core/register.html', context)

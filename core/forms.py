@@ -12,9 +12,9 @@ class LoginForm(forms.Form):
 
 class RegisterForm(LoginForm):
     username = forms.CharField(max_length=20,
-                               widget=forms.TextInput(attrs={'class': 'form-text', 
+                               widget=forms.TextInput(attrs={'class': 'form-control', 
                                                              'placeholder': 'Nutzername'}))
 
     password2 = forms.CharField(max_length=255,
-                               widget=forms.PasswordInput(attrs={'class': 'form-text', 
+                               widget=forms.PasswordInput(attrs={'class': 'form-control', 
                                                                  'placeholder': 'Passwort wiederholen'}))
