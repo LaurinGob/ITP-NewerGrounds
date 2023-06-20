@@ -1,7 +1,11 @@
 from django.contrib import admin
-from .models import Game, Achievement, User_Has_Achievement
+from .models import Game, Achievement
 
-# Register your models here.
+# Define how Achievement should be displayed in Admin panel 
+class AchievementAdmin(admin.ModelAdmin):
+    list_display = ["id", "title", "description", "game"] 
+
+
+# Register your models here
 admin.site.register(Game)
-admin.site.register(Achievement)
-admin.site.register(User_Has_Achievement)
+admin.site.register(Achievement, AchievementAdmin)

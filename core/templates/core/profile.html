@@ -4,4 +4,12 @@
 <p>Username: {{user.username}}</p>
 <p>E-Mail: {{user.email}}</p>
 
+<h1>Achievements</h1>
+{% for achievement in user.achievements.all %}
+<div>
+    <p>{{ achievement.game }}</p>
+    <p>{{ achievement.title }} - {{ achievement.description }}</p>
+</div>
+{% endfor %}
+
 {% endblock content %}
