@@ -21,14 +21,14 @@ def profile(request: HttpRequest):
         return render(request, 'core/login.html', {'form': LoginForm})
 
 def vw_login(request: HttpRequest):
-    # If user is requesting site    
-    if request.method == "GET":
-        form = LoginForm
+    form = LoginForm
+
+    if request.user.is_authenticated:
+        messages.error(request, "Sie sind bereits eingeloggt")
 
     # If user has submitted the form
     elif request.method == "POST":
         form = LoginForm(request.POST)
-        context = {}
 
         if form.is_valid():
             email = form.cleaned_data['email']
@@ -36,11 +36,12 @@ def vw_login(request: HttpRequest):
 
             user = authenticate(request, email=email, password=password)
 
-            if user is not None:
+            if user is None:
+                messages.error(request, "E-Mail oder Passwort falsch")
+            else:
                 login(request, user)
                 messages.success(request, "Login erfolgreich")
-            else:
-                messages.succes(request, "E-Mail oder Passwort falsch")
+                form = LoginForm
         
         else:
             messages.error(request, str(form.errors))
