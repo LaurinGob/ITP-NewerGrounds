@@ -11,7 +11,9 @@ VSCode Extension installieren: Django (Siehe Extension Beschreibung, um Django-H
 - http://127.0.0.1:8000/login (testuser1@testuser1.com, testuser1)
 - http://127.0.0.1:8000/register 
 - http://127.0.0.1:8000/sampleGame
-- http://127.0.0.1:8000/api/games
+- http://127.0.0.1:8000/profile
+- http://127.0.0.1:8000/profile/<username>
+- http://127.0.0.1:8000/api/unlock/<achievement_id>
 
 # Anleitungen
 
@@ -32,7 +34,13 @@ VSCode Extension installieren: Django (Siehe Extension Beschreibung, um Django-H
   - Dann in urlpatterns Liste speichern: `path('<spielname', <spielname>, name="<spielname>")` (urlpattern zeigt nun auf View, und View verarbeitet die Client-Request und schickt über return eine Response)
   - Das URL-Routing bestimmt, welche View bei welchem URL-Aufruf geladen werden soll. In unserem Fall die View unseres Spiels, da diese die HTML-Seite für das Spiel returned.
 
-4. Spiel in Datenbank anlegen. Am einfachsten zu erledigen im Admin-Panel: http://127.0.0.1:8000/admin (email: root@root.root, pw: adminadmin). 
+4. Spiel in Datenbank anlegen. Am einfachsten zu erledigen im Admin-Panel: http://127.0.0.1:8000/admin (email: root@root.root, pw: adminadmin).
+
+## Achievements
+
+1. Achievement in Datenbank über Admin-Panel anlegen: http://127.0.0.1:8000/admin (email: root@root.root, pw: adminadmin)
+2. achievement.js aus core/static/core/libs in euer Spiel einbinden.
+3. Die unlock_achievement(<achievement_id>) vom Spiel aufrufen lassen. 
 
 # Allgemein
 
