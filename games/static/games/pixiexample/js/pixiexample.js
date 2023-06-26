@@ -178,16 +178,13 @@ function checkGameOver(){
         //------------- Achievements -------------
         if(SCORE <= 10000){
             unlock_achievement(12);
-            alert("You unlocked 'The Rock bottom'");
-        }
-        if(chainCombo >= 50){
-            unlock_achievement(10);
-            alert("You unlocked 'Spinebuster'");
         }
         if(jumpCount >= 100){
             unlock_achievement(11);
-            alert("You unlocked 'Flying Crossbody'");
-        }     
+        }   
+        if(chainCombo >= 50){
+            unlock_achievement(10);
+        }
     }
 }
 

@@ -293,20 +293,16 @@ function gameOverSettings(){
 
     //------------ Achievments -----------------
     if(score <= 0){
-        unlock_achievement(1);
-        alert("You unlocked 'Early bird'");
+        unlock_achievement(6);
     }
     if(score >= 50){
-        unlock_achievement(1);
-        alert("You unlocked 'Sparrow'");
+        unlock_achievement(7);
     }
     if(score >= 100){
-        unlock_achievement(1);
-        alert("You unlocked 'Eagle'");
+        unlock_achievement(8);
     }
     if(score >= 1000){
-        unlock_achievement(1);
-        alert("You unlocked 'A f**king aircraft?'");
+        unlock_achievement(9);
     }
 
     //----------------------------------
