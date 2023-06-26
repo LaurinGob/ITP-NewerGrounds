@@ -25,7 +25,8 @@ document.addEventListener("keydown", function() {
 
 const landingAudio = new Audio('../../static/games/pixiexample/res/sound/RockinRamen_Landing.mp3');
 landingAudio.loop = false;
-landingAudio.volume = 0.5;
+landingAudio.volume = 0.05;
+
 
 
 // adds pixi canvas to selected dom
@@ -188,6 +189,13 @@ function checkGameOver(){
     }
 }
 
+//play audio
+function playLandingAudio() { 
+    const newSound = landingAudio.cloneNode();
+    newSound.volume = 0.2;
+    newSound.play(); 
+} 
+
 // #################### gameloop
 function gameLoop(delta) {
     // main gameloop for the game logic
@@ -210,7 +218,7 @@ function gameLoop(delta) {
             groundbreak.gotoAndStop(0);
             groundbreak.play();
             groundbreak.visible = true;
-            landingAudio.play();
+            playLandingAudio()
             setTimeout(function() {groundbreak.visible = false;}, 700);
             prepare_impact = false;
             setTimeout(function() {jump_release = true;player.gotoAndStop(1);}, 400);

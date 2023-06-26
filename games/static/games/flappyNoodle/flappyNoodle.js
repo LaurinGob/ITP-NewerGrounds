@@ -57,23 +57,37 @@ GAME.stage.addChild(backgroundSprite);
 // set up ui elements and add to uianchor
 const STARTSCREEN_ANCHOR = document.createElement("div"); // the root element of UI
 STARTSCREEN_ANCHOR.setAttribute("id", "uiAnchor");
+STARTSCREEN_ANCHOR.style.position = 'absolute';
 STARTSCREEN_ANCHOR.style.fontWeight = 'bolder'; // defines font for ui
+STARTSCREEN_ANCHOR.style.display = "flex";
+STARTSCREEN_ANCHOR.style.alignItems = "center";
+STARTSCREEN_ANCHOR.style.justifyContent = "center";
+STARTSCREEN_ANCHOR.style.flexDirection ="column";
+STARTSCREEN_ANCHOR.style.textAlign = "center";
+STARTSCREEN_ANCHOR.style.width = "960px";
+STARTSCREEN_ANCHOR.style.height = "540px";
+
+
+
+
 
 //Start Screen
 const STARTSCREEN_ELEMENT = document.createElement("div");
-STARTSCREEN_ELEMENT.position = 'absolute';
+STARTSCREEN_ELEMENT.position = 'relative';
 
 const TITLE_ELEMENT = document.createElement("div");
 TITLE_ELEMENT.setAttribute("id", "title");
-TITLE_ELEMENT.setAttribute("style", "position: absolute; top: 100px; left: 13px; font-weight: bolder; color: rgb(233, 200, 20)");
+TITLE_ELEMENT.style.color = 'rgb(233, 200, 20)';
 const TITLE_H1 = document.createElement("h1");
 TITLE_H1.innerText = 'Flappy Noodles';
-TITLE_H1.setAttribute("style", "font-size: 120px");
+TITLE_H1.setAttribute("style", "font-size: 100px");
 TITLE_ELEMENT.appendChild(TITLE_H1);
 
 const STARTBUTTON_ELEMENT =  document.createElement("div");
 STARTBUTTON_ELEMENT.setAttribute("id", "startButton");
-STARTBUTTON_ELEMENT.setAttribute("style", "position: absolute; top: 270px; left: 360px; font-weight: bolder; color: rgb(233, 167, 25)");
+STARTBUTTON_ELEMENT.style.color = 'rgb(233, 167, 25)';
+STARTBUTTON_ELEMENT.style.minWidth = 'auto';
+
 STARTBUTTON_ELEMENT.addEventListener("click", startGame);
 STARTBUTTON_ELEMENT.addEventListener("mouseover", function() {
     STARTBUTTON_ELEMENT.style.textShadow = "0 0 10px black";
@@ -83,23 +97,50 @@ STARTBUTTON_ELEMENT.addEventListener("mouseout", function() {
 });
 const STARTBUTTON_H1 = document.createElement("h1");
 STARTBUTTON_H1.innerText = 'Start';
-STARTBUTTON_H1.setAttribute("style", "font-size: 100px");
+STARTBUTTON_H1.setAttribute("style", "font-size: 80px");
 STARTBUTTON_ELEMENT.appendChild(STARTBUTTON_H1);
 
-STARTSCREEN_ELEMENT.appendChild(STARTBUTTON_ELEMENT);
+
 STARTSCREEN_ELEMENT.appendChild(TITLE_ELEMENT);
+STARTSCREEN_ELEMENT.appendChild(STARTBUTTON_ELEMENT);
 STARTSCREEN_ANCHOR.appendChild(STARTSCREEN_ELEMENT);
 CANVASANCHOR.style.position = 'relative'; // VERY IMPORTANT !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 CANVASANCHOR.appendChild(STARTSCREEN_ANCHOR);
+
+//Game Over tag
+const GAMEOVER_DIV = document.createElement("div");
+GAMEOVER_DIV.setAttribute("id", "gameOver");
+GAMEOVER_DIV.style.color = 'red';
+const GAMEOVER_H1 = document.createElement("h1"); 
+GAMEOVER_H1.setAttribute("style", "font-size: 120px")
+GAMEOVER_H1.innerText = 'GAME OVER';
+GAMEOVER_DIV.appendChild(GAMEOVER_H1);
+GAMEOVER_DIV.style.textShadow = "0 0 10px black";
+
+//Restart tag
+const RESTART_DIV = document.createElement("div");
+RESTART_DIV.setAttribute("id", "restart");
+RESTART_DIV.style.color = 'white';
+const RESTART_H1 = document.createElement("h1"); 
+RESTART_H1.innerText = 'Press "r" to restart the game';
+RESTART_DIV.appendChild(RESTART_H1);
+RESTART_DIV.style.textShadow = "0 0 10px black";
+
+
 CANVASANCHOR.appendChild(GAME.view);
 
 
 
 function startGame(){
-    //Remove Startscreen
-    STARTSCREEN_ANCHOR.replaceChildren();
-    STARTSCREEN_ANCHOR.remove();
+    TITLE_ELEMENT.style.display='none';
+    STARTBUTTON_ELEMENT.style.display='none';
     
+    STARTSCREEN_ANCHOR.appendChild(GAMEOVER_DIV);
+    STARTSCREEN_ANCHOR.appendChild(RESTART_DIV);
+    
+    
+    GAMEOVER_DIV.style.display = 'none';
+    RESTART_DIV.style.display ='none';
     // adds the gameloop function to ticker (pixi.js)
     GAME.ticker.add(gameLoop);
     GAME.ticker.maxFPS = MAX_FPS;
@@ -116,49 +157,15 @@ function startGame(){
 
     // ####################### ui elements
 
-    // set up ui elements and add to uianchor
-    const UIANCHOR = document.createElement("div"); // the root element of UI
-    UIANCHOR.setAttribute("id", "uiAnchor");
-    UIANCHOR.style.fontWeight = 'bolder'; // defines font for ui
-
-    // positioning
-    const UIPOSITION = document.createElement("div"); // sub element of UI, used to position elements
-    UIPOSITION.style.position = 'absolute';
-    UIPOSITION.style.top = '10px';
-    UIPOSITION.style.left = '10px';
-    UIANCHOR.appendChild(UIPOSITION);
-
     const SCORE_ELEMENT = document.createElement("h1"); // generate a dom to write to
     SCORE_ELEMENT.setAttribute("style", "color: white;");
     SCORE_ELEMENT.innerText = 'Score: '; // static text for the element
     const SCORE_SPAN = document.createElement("span"); // the elements containing the dynamic text
     SCORE_SPAN.setAttribute("id", "score"); // to later call the span
     SCORE_ELEMENT.appendChild(SCORE_SPAN); // add span to element
-    UIPOSITION.appendChild(SCORE_ELEMENT); // add to UIPosition
-
-    //Game Over tag
-    const GAMEOVER_DIV = document.createElement("div");
-    GAMEOVER_DIV.setAttribute("id", "gameOver");
-    GAMEOVER_DIV.setAttribute("style", "position: absolute; top: 100px; left: 30px; font-weight: bolder; color: red; display: none;");
-    const GAMEOVER_H1 = document.createElement("h1"); 
-    GAMEOVER_H1.setAttribute("style", "font-size: 180px")
-    GAMEOVER_H1.innerText = 'GAME OVER';
-    GAMEOVER_DIV.appendChild(GAMEOVER_H1);
-    UIANCHOR.appendChild(GAMEOVER_DIV);
-
-    //Restart tag
-    const RESTART_DIV = document.createElement("div");
-    RESTART_DIV.setAttribute("id", "restart");
-    RESTART_DIV.setAttribute("style", "position: absolute; top: 300px; left: 240px; font-weight: bolder; color: white; display: none;");
-    const RESTART_H1 = document.createElement("h1"); 
-    RESTART_H1.innerText = 'Press "r" to restart the game';
-    RESTART_DIV.appendChild(RESTART_H1);
-    UIANCHOR.appendChild(RESTART_DIV);
-
-    // adds pixi canvas to selected dom
-    CANVASANCHOR.appendChild(UIANCHOR);
-
-
+    SCORE_ELEMENT.style.textShadow = "0 0 10px black";
+    STARTSCREEN_ELEMENT.appendChild(SCORE_ELEMENT); // add to UIPosition
+    
 }
 
 
@@ -397,7 +404,7 @@ function gameLoop(delta) {
         }
 
         if(!keys[' '] && spaceHasBeenPressed){
-            spaceHasBeenPressed = false;
+            spaceHasBeenPressed = false;    
         }
 
         player.rotation = getRotation(velocity);

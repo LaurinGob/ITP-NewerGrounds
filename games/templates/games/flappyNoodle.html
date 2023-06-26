@@ -3,8 +3,7 @@
 
 
 {% block content %}
-
-<h1>{{ game.title }}</h1>
+<div></div>
 
 {# Game-specific scripts (like libraries, ... #}
 <script src="../../static/games/libs/pixi.min.js" defer></script>
@@ -14,7 +13,8 @@
 <script src="../../static/games/libs/achievement.js" defer></script>
 
 {# Canvas #}
-<div id="canvasAnchor"></div>
-<p>{{ game.description }}</p>
+<div id="canvasAnchor" class="d-flex justify-content-center mt-5" style="position: relative;">
+</div>
+<p class="d-flex justify-content-center mt-5"  >{{ game.description }}</p>
 
 {% endblock content %}
