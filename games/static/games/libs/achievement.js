@@ -6,7 +6,8 @@ function unlock_achievement(id){
     xhr.onreadystatechange = () => {
         if(xhr.status == 200 && xhr.readyState == 4){
             const achievement = JSON.parse(xhr.responseText);
-            alert(`Achievement unlocked!\n${achievement.title} - ${achievement.description}`)
+            alert(`Achievement unlocked!\n
+                   ${achievement.title} - ${achievement.description} (${achievement.total_unlocked}/${achievement.total_game_achievements})`)
         }
     }
 
