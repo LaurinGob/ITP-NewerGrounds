@@ -5,7 +5,7 @@ from django.utils import timezone
 from rest_framework.decorators import api_view
 
 from games.models import Game, Achievement
-from .serializers import GameSerializer
+from .serializers import GameSerializer, AchievementSerializer
 
 # Create your views here.
 @api_view(["GET"])
@@ -29,7 +29,12 @@ def unlock_achievement(request: HttpRequest, achievement_id: int):
         return HttpResponse(content="No such achievement ID exists", status=400)  # Bad Request
 
     # Save achievement to user
-    request.user.achievements.add(achievement)
+    if achievement in request.user.achievements.get(id=1):  # HACK
+        return HttpResponse(content="Achievement already unlocked", status=400)
+    else:
+        request.user.achievements.add(achievement)
 
-    return HttpResponse(status=200)  # Success
+    # Emit response containing Achievement information
+    serializer = AchievementSerializer(achievement)
+    return JsonResponse(serializer.data)  # Success
 

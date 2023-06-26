@@ -18,3 +18,8 @@ class GameSerializer(serializers.Serializer):
     def get_thumbnail(self, object: Game):
         # Doing it this way sucks ass:
         return static('games/' + object.view_name + '/thumbnail.png') 
+        
+
+class AchievementSerializer(serializers.Serializer):
+    title = serializers.CharField(read_only=True)
+    description = serializers.CharField(read_only=True)
