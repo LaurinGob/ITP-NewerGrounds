@@ -29,7 +29,7 @@ def unlock_achievement(request: HttpRequest, achievement_id: int):
         return HttpResponse(content="No such achievement ID exists", status=400)  # Bad Request
 
     # Save achievement to user
-    if achievement in request.user.achievements.get(id=1):  # HACK
+    if achievement in request.user.achievements.all():  # HACK
         return HttpResponse(content="Achievement already unlocked", status=400)
     else:
         request.user.achievements.add(achievement)

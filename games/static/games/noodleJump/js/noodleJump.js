@@ -205,16 +205,16 @@ function gameLoop(delta) {
         if(SCORE <= 0){
             unlock_achievement(1);
         }
-        if(SCORE >= 1000){
+        if(SCORE >= 10000){
             unlock_achievement(2);
         }
-        if(SCORE >= 10000){
+        if(SCORE >= 100000){
             unlock_achievement(3);
         }
-        if(SCORE >= 100000){
+        if(SCORE >= 1000000){
             unlock_achievement(4);
         }
-        if(SCORE >= 1000000){
+        if(SCORE >= 10000000){
             unlock_achievement(5);
         }
         //------------------------------------

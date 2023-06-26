@@ -291,24 +291,24 @@ function gameOverSettings(){
     let RESTART = document.getElementById("restart");
     RESTART.style.display = "block";
 
-    //------------ Achievments -----------------
-    if(score <= 0){
-        unlock_achievement(6);
-    }
-    if(score >= 50){
-        unlock_achievement(7);
-    }
-    if(score >= 100){
-        unlock_achievement(8);
-    }
-    if(score >= 1000){
-        unlock_achievement(9);
-    }
-
-    //----------------------------------
     setTimeout(() => {
         // Stops the loop
         GAME.ticker.stop();
+        //------------ Achievments -----------------
+        if(score <= 0){
+            unlock_achievement(6);
+        }
+        if(score >= 50){
+            unlock_achievement(7);
+        }
+        if(score >= 100){
+            unlock_achievement(8);
+        }
+        if(score >= 1000){
+            unlock_achievement(9);
+        }
+
+        //----------------------------------
 
       }, 1500);
 }
