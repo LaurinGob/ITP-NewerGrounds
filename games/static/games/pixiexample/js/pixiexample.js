@@ -129,6 +129,8 @@ let playerFallingSpeed = 6;
 let ramenFallingSpeed = 2;
 let rockCounter = 0;
 let health = 10;
+let jumpCount = 0;
+let chainCombo = false;
 let chain = 0;
 let comboMultiplier = 0;
 
@@ -172,6 +174,20 @@ function checkGameOver(){
         GAME.ticker.stop();
         UI_GAMEOVER.style.display = 'block';
         UI_GAMEOVER_TEXT.innerHTML = 'GAME OVER<br>Score: ' + Math.floor(SCORE/10);
+
+        //------------- Achievements -------------
+        if(SCORE <= 10000){
+            unlock_achievement(12);
+            alert("You unlocked 'The Rock bottom'");
+        }
+        if(chainCombo >= 50){
+            unlock_achievement(10);
+            alert("You unlocked 'Spinebuster'");
+        }
+        if(jumpCount >= 100){
+            unlock_achievement(11);
+            alert("You unlocked 'Flying Crossbody'");
+        }     
     }
 }
 
@@ -212,6 +228,7 @@ function gameLoop(delta) {
             player_jumping = true;
             player_airborne = true;
             y_velocity = -65;
+            ++jumpCount;
         }
     }
     if (keys['65']) {
@@ -234,8 +251,6 @@ function gameLoop(delta) {
                 const emitter = createRamenEmitter(enemyArray[i], i);
                 enemyArray[i].position.x = getRandomInt(SCREEN_WIDTH);
                 enemyArray[i].position.y = 0;
-                //tempnumber = 1 + Math.random();
-                //enemyArray[i].scale.set(tempnumber,tempnumber);
                 chain++;
                 comboMultiplier = Math.floor(chain/5);
                 rockCounter += comboMultiplier;
@@ -244,6 +259,9 @@ function gameLoop(delta) {
                 // get damage
                 enemyArray[i].position.x = getRandomInt(SCREEN_WIDTH);
                 enemyArray[i].position.y = 0;
+                if(chain >= 50){
+                    chainCombo = true;
+                }
                 chain = 0;
                 comboMultiplier = Math.floor(chain/5);
                 rockCounter += comboMultiplier;

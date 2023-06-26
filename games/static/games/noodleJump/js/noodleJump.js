@@ -200,6 +200,29 @@ function gameLoop(delta) {
         UI_GAMEOVER.style.display = 'block';
         UI_GAMEOVER_TEXT.innerHTML = 'GAME OVER<br>Score: ' + Math.floor(SCORE/10);
         GAME.ticker.stop();
+
+        //----------- Achievements -----------------
+        if(SCORE <= 0){
+            unlock_achievement(1);
+            alert("You unlocked 'Loser'");
+        }
+        if(SCORE >= 1000){
+            unlock_achievement(2);
+            alert("You unlocked 'First Step tp a million'");
+        }
+        if(SCORE >= 10000){
+            unlock_achievement(3);
+            alert("You unlocked 'You're almost to a million'");
+        }
+        if(SCORE >= 100000){
+            unlock_achievement(4);
+            alert("You unlocked '9/10 professional gamers didn't get this far'");
+        }
+        if(SCORE >= 1000000){
+            unlock_achievement(5);
+            alert("You unlocked 'I hope you got here by cheating'");
+        }
+        //------------------------------------
     }
 
     //Gameplay

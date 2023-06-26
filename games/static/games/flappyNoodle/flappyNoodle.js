@@ -291,9 +291,29 @@ function gameOverSettings(){
     let RESTART = document.getElementById("restart");
     RESTART.style.display = "block";
 
+    //------------ Achievments -----------------
+    if(score <= 0){
+        unlock_achievement(1);
+        alert("You unlocked 'Early bird'");
+    }
+    if(score >= 50){
+        unlock_achievement(1);
+        alert("You unlocked 'Sparrow'");
+    }
+    if(score >= 100){
+        unlock_achievement(1);
+        alert("You unlocked 'Eagle'");
+    }
+    if(score >= 1000){
+        unlock_achievement(1);
+        alert("You unlocked 'A f**king aircraft?'");
+    }
+
+    //----------------------------------
     setTimeout(() => {
         // Stops the loop
         GAME.ticker.stop();
+
       }, 1500);
 }
 
