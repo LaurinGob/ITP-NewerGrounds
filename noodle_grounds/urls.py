@@ -19,7 +19,7 @@ from django.urls import path, include
 
 from core.views import vw_login, vw_register, index, contact, self_profile, profile
 from games.views import sampleGame  # Hier die Minispiel View von /games/views.py importieren
-from games.views import pixiexample
+from games.views import rockinramen
 from games.views import playerexample
 from games.views import noodleJump
 from games.views import flappyNoodle
@@ -37,7 +37,7 @@ urlpatterns = [
     
     # Games; hier Pfad zur Minispiel View definieren
     path('sampleGame', sampleGame, name="sampleGame"),
-    path('pixiexample', pixiexample, name="pixiexample"),
+    path('rockinramen', rockinramen, name="rockinramen"),
     path('playerexample', playerexample, name="playerexample"),
     path('noodleJump', noodleJump, name="noodleJump"),
     path('flappyNoodle', flappyNoodle, name="flappyNoodle"),

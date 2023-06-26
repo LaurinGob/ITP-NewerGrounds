@@ -9,12 +9,11 @@
     <script src="../../static/games/pixiexample/js/pixiexample.js" defer></script>
     <script src="../../static/games/libs/achievement.js" defer></script>
 
-    <div id="canvasAnchor" class="d-flex justify-content-center" style="position: relative;">
-        <div style="position: absolute; top: 10px; left: 10px; font-family: Calibri; font-weight: bolder;">
-            <h1>Ramen eaten: <span id="uiRockCounter"></span> (<span id="uiComboMultiplier"></span>x)</h1>
-            <h1>Hunger: <span id="uiHealth"></span></h1>
-            <h1>Feast Chain: <span id="uiChain"></span></h1>
-        </div>
+    <div class="d-flex justify-content-center flex-column">
+        <div id="canvasAnchor" class="d-flex justify-content-center" style="position: relative;"> </div>
+        <h1 class="d-flex justify-content-center">Ramen eaten: <span id="uiRockCounter"></span> (<span id="uiComboMultiplier"></span>x)</h1>
+        <h1 class="d-flex justify-content-center">Hunger: <span id="uiHealth"></span></h1>
+        <h1 class="d-flex justify-content-center">Feast Chain: <span id="uiChain"></span></h1>
     </div>
     <!---->
 {% endblock content %}

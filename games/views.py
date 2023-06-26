@@ -31,8 +31,8 @@ def sampleGame(request: HttpRequest):
     return render(request, 'games/sampleGame.html', context)  # <- .html auf <spielname>.html ausbessern
 
 
-def pixiexample(request: HttpRequest):
-    game = Game.objects.get(internal_name='pixiexample')
+def rockinramen(request: HttpRequest):
+    game = Game.objects.get(internal_name='rockinramen')
     context = {'game': game}
     return render(request, 'games/pixiexample.html', context)
 

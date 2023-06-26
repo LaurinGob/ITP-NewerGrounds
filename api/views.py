@@ -36,5 +36,9 @@ def unlock_achievement(request: HttpRequest, achievement_id: int):
 
     # Emit response containing Achievement information
     serializer = AchievementSerializer(achievement)
-    return JsonResponse(serializer.data)  # Success
+    res = dict(serializer.data)
+    res['total_game_achievements'] = Achievement.objects.filter(game=achievement.game).count()
+    res['total_unlocked'] = request.user.achievements.filter(game=achievement.game).count()
+
+    return JsonResponse(res)  # Success
 
